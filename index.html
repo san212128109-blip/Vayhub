@@ -366,10 +366,10 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;color:inhe
   <div class="hero-visual">
     <div class="hero-card">
       <div class="hero-card-img">📦</div>
-      <div class="income-float"><div class="ic">💵</div><div><div class="lb">মোট আয়</div><div class="vl">৳২,৪০০</div></div></div>
+      <div class="income-float"><div class="ic">💵</div><div><div class="lb">মোট আয়</div><div class="vl">৳৫,৪০০</div></div></div>
       <div class="hero-card-body">
         <div style="font-size:13px;font-weight:700;margin-bottom:3px">আজকের অর্ডার</div>
-        <div style="font-size:11px;color:#999">১২টি নতুন অর্ডার এসেছে</div>
+        <div style="font-size:11px;color:#999">২টি নতুন অর্ডার এসেছে</div>
       </div>
     </div>
   </div>
@@ -418,7 +418,9 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;color:inhe
 <section style="background:linear-gradient(135deg,#fff5f0 0%,#ffe8d6 100%);border:1px solid rgba(255,87,34,0.2);border-radius:16px;padding:40px 16px;text-align:center;margin:30px 16px;max-width:1160px;margin-left:auto;margin-right:auto">
   <h2 style="font-size:clamp(22px,5vw,32px);margin-bottom:10px;font-weight:800;color:#1a1a1a">আজই শুরু করুন</h2>
   <p style="color:#666;margin-bottom:20px;font-size:13px">হাজারো উদ্যোক্তার মতো আপনিও ঘরে বসে ব্যবসা শুরু করুন।</p>
-  
+  <form style="display:flex;gap:8px;max-width:500px;margin:0 auto;flex-wrap:wrap;justify-content:center" onsubmit="handleCtaSubmit(event)">
+    <input type="email" placeholder="আপনার ইমেইল দিন" required id="ctaEmail" style="flex:1;min-width:200px;padding:12px 16px;background:#fff;color:#0a0a0a;border-radius:8px;border:1px solid #ddd;font-size:13px;font-family:inherit;outline:none">
+    <button type="submit" style="padding:12px 22px;background:#ff5722;color:#fff;border-radius:8px;font-weight:700;font-size:13px;border:none;cursor:pointer;font-family:inherit">যোগ দিন →</button>
   </form>
 </section>
 
@@ -460,7 +462,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;color:inhe
       <div class="sidebar-item" data-page="sales" onclick="switchDashPage('sales',this)"><span class="ic">📈</span><span class="lbl">সেলস & প্রফিট</span></div>
       <div class="sidebar-item" data-page="balance" onclick="switchDashPage('balance',this)"><span class="ic">💰</span><span class="lbl">ব্যালেন্স স্টেটমেন্ট</span></div>
       <div class="sidebar-item" data-page="withdraw" onclick="switchDashPage('withdraw',this)"><span class="ic">💵</span><span class="lbl">টাকা উত্তোলন</span></div>
-      
+      <div class="sidebar-item" data-page="admin-users" onclick="switchDashPage('admin-users',this)" id="adminUsersMenu" style="display:none"><span class="ic">👥</span><span class="lbl">সকল ইউজার</span><span class="badge-new">ADMIN</span></div>
       <div class="sidebar-item" data-page="customer-control" onclick="switchDashPage('customer-control',this)" id="customerControlMenu" style="display:none"><span class="ic">🎯</span><span class="lbl">Customer Control</span><span class="badge-new">ADMIN</span></div>
     </nav>
     <div class="sidebar-footer">
@@ -634,42 +636,26 @@ var users=[
 ];
 
 var products=[
-  .top-products{background:#fff;padding:16px;border-bottom:1px solid #eee;max-width:1200px;margin:0 auto}
-.top-products-scroll{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;overflow-x:auto;padding-bottom:4px}
-.mini-product-card{border:1px solid #eee;border-radius:8px;padding:8px;text-align:center;background:#fff}
-.mini-product-card .mp-img{width:100%;aspect-ratio:1;background:#f9f9f9;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:28px;color:#ff5722;margin-bottom:6px;overflow:hidden;position:relative;cursor:pointer}
-.mini-product-card .mp-img img{width:100%;height:100%;object-fit:cover}
-.mini-product-card .mp-img .upload-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.7);color:#fff;display:none;align-items:center;justify-content:center;font-size:11px;font-weight:600}
-.mini-product-card .mp-img:hover .upload-overlay{display:flex}
-.mini-product-card .mp-name{font-size:11px;font-weight:600;color:#333;margin-bottom:4px;height:28px;overflow:hidden}
-.mini-product-card .mp-price{font-size:12px;color:#ff5722;font-weight:700;margin-bottom:6px}
-.order-btn{width:100%;background:#ff5722;color:#fff;border:none;padding:8px;border-radius:20px;font-weight:700;font-size:12px;font-family:inherit;cursor:pointer;transition:all 0.2s}
-.order-btn:hover{background:#e64a19;transform:translateY(-1px)}
-
-.view-more-wrap{text-align:center;padding:20px;max-width:1200px;margin:0 auto}
-.view-more-btn{background:#ff5722;color:#fff;padding:12px 28px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit;border-radius:4px}
-
-.cat-section{padding:24px 16px;max-width:1200px;margin:0 auto}
-.cat-section-title{font-size:20px;font-weight:800;color:#1a1a1a;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #eee}
-.cat-products{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
-
-.product-card{background:#fff;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden;position:relative;transition:all 0.3s;display:flex;flex-direction:column}
-.product-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.1);transform:translateY(-2px);border-color:#ff5722}
-.product-img-wrap{position:relative;width:100%;aspect-ratio:1;overflow:hidden;background:#f9f9f9;cursor:pointer}
-.product-img{width:100%;height:100%;object-fit:cover;display:block}
-.product-img img{width:100%;height:100%;object-fit:cover}
-.product-img-wrap .upload-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.7);color:#fff;display:none;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-direction:column;gap:4px}
-.product-img-wrap:hover .upload-overlay{display:flex}
-.discount-badge{position:absolute;top:8px;right:8px;background:#e91e63;color:#fff;width:44px;height:44px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;line-height:1;box-shadow:0 2px 6px rgba(233,30,99,0.4);z-index:2}
-.discount-badge .pct{font-size:13px;font-weight:900}
-.discount-badge .off{font-size:9px;font-weight:700}
-.product-info{padding:10px;text-align:center;flex:1;display:flex;flex-direction:column}
-.product-name{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:8px;min-height:36px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.product-price-row{margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:6px}
-.old-price{font-size:12px;color:#2196f3;text-decoration:line-through}
-.new-price{font-size:14px;color:#ff5722;font-weight:800}
-.product-card .order-btn{margin-top:auto;border-radius:20px;padding:10px;font-size:13px}
-
+  {id:1,name:'T Shirt',cat:'Mens',price:499,discountPrice:249,discount:50,stock:120,icon:'👕',image:'',video:''},
+  {id:2,name:'Hoodie',cat:'Mens',price:650,discountPrice:499,discount:23,stock:85,icon:'🧥',image:'',video:''},
+  {id:3,name:'HOODIE JUMPER',cat:'Mens',price:699,discountPrice:599,discount:14,stock:60,icon:'👔',image:'',video:''},
+  {id:4,name:'HOODIE JUMPER',cat:'Mens',price:755,discountPrice:655,discount:13,stock:95,icon:'👕',image:'',video:''},
+  {id:5,name:'HOODIE JUMPER',cat:'Mens',price:699,discountPrice:599,discount:14,stock:70,icon:'🧥',image:'',video:''},
+  {id:6,name:'BMX T-Shirt',cat:'Fashion',price:899,discountPrice:764,discount:15,stock:110,icon:'👕',image:'',video:''},
+  {id:7,name:'AirPods Pro',cat:'Fashion',price:2500,discountPrice:2000,discount:20,stock:45,icon:'🎧',image:'',video:''},
+  {id:8,name:'বাংলাদেশি হুডি',cat:'Fashion',price:1200,discountPrice:972,discount:19,stock:80,icon:'🧥',image:'',video:''},
+  {id:9,name:'ABOUT BREAK Hoodie',cat:'Fashion',price:1500,discountPrice:1245,discount:17,stock:55,icon:'👕',image:'',video:''},
+  {id:10,name:'ABOUT BREAK Crewneck',cat:'Fashion',price:1800,discountPrice:1548,discount:14,stock:90,icon:'🧥',image:'',video:''},
+  {id:11,name:'Smart Watch Pro',cat:'Smart Watch',price:3500,discountPrice:2800,discount:20,stock:40,icon:'⌚',image:'',video:''},
+  {id:12,name:'Fitness Band',cat:'Smart Watch',price:1500,discountPrice:1275,discount:15,stock:100,icon:'⌚',image:'',video:''},
+  {id:13,name:'Classic Watch',cat:'Watch',price:2200,discountPrice:1870,discount:15,stock:35,icon:'⌚',image:'',video:''},
+  {id:14,name:'Leather Watch',cat:'Watch',price:4500,discountPrice:3825,discount:15,stock:25,icon:'⌚',image:'',video:''},
+  {id:15,name:'Slim Jeans',cat:'Clothing',price:1200,discountPrice:960,discount:20,stock:150,icon:'👖',image:'',video:''},
+  {id:16,name:'Cargo Pants',cat:'Clothing',price:1500,discountPrice:1200,discount:20,stock:80,icon:'👖',image:'',video:''},
+  {id:17,name:'Home Decor Lamp',cat:'Home Decor',price:800,discountPrice:640,discount:20,stock:60,icon:'💡',image:'',video:''},
+  {id:18,name:'Wall Art Frame',cat:'Home Decor',price:1500,discountPrice:1275,discount:15,stock:40,icon:'🖼️',image:'',video:''},
+  {id:19,name:'Wireless Earbuds',cat:'Electronics',price:3299,discountPrice:2804,discount:15,stock:120,icon:'🎧',image:'',video:''},
+  {id:20,name:'Power Bank 20000mAh',cat:'Electronics',price:1800,discountPrice:1530,discount:15,stock:90,icon:'🔋',image:'',video:''}
 ];
 
 var categories=[
