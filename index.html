@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>OnlineHatDropShop - বাংলাদেশের #1 Dropshipping প্ল্যাটফর্ম</title>
-  <title>CEO and CO Founder sadat al nafis</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/hind-siliguri@5.0.17/index.min.css">
 <style>
@@ -25,6 +23,8 @@ body { background: #f8fafc; color: #1e293b; }
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: #f1f5f9; }
 ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
+.notif-dropdown { animation: slideDown 0.2s ease-out; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
@@ -37,18 +37,20 @@ const DEFAULT_DATA = {
   users: [
     { id: 1, name: 'সাদাত হোসেন', email: 'ceo@hatdrop.com', phone: '01700000001', username: 'ceo_sadat', password: 'ceo123', role: 'CEO', balance: 50000, verified: true, shopName: 'HatDrop HQ', createdAt: '2024-01-01', credits: 1000 },
     { id: 2, name: 'অ্যাডমিন', email: 'admin@hatdrop.com', phone: '01700000002', username: 'admin', password: 'admin123', role: 'Admin', balance: 25000, verified: true, shopName: 'Admin Shop', createdAt: '2024-01-01', credits: 500 },
-   
+    { id: 3, name: 'রাহেলা আক্তার', email: 'rahela@hatdrop.com', phone: '01700000003', username: 'rahela_trade', password: 'vendor123', role: 'Vendor', balance: 15000, verified: true, shopName: 'Rahela Trade', createdAt: '2024-02-15', credits: 200 },
+    { id: 4, name: 'টেস্ট কাস্টমার', email: 'test@hatdrop.com', phone: '01700000004', username: 'testcustomer', password: 'customer123', role: 'Customer', balance: 5000, verified: false, shopName: '', createdAt: '2024-03-01', credits: 100 }
+  ],
   products: [
-    { id: 1, name: 'Drop Shoulder T-shirt', category: 'T-shirt', price: 350, originalPrice: 700, stock: 45, image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop', rating: 4.5, reviews: [], description: 'প্রিমিয়াম ড্রপ শোল্ডার টি-শার্ট' },
-    { id: 2, name: 'Solid Formal Shirt', category: 'Shirt', price: 850, originalPrice: 1200, stock: 120, image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=300&h=300&fit=crop', rating: 4.2, reviews: [], description: 'ফর্মাল শার্ট' },
-    { id: 3, name: 'Boot Cut Pant', category: 'Pants', price: 1200, originalPrice: 1800, stock: 30, image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=300&h=300&fit=crop', rating: 4.8, reviews: [], description: 'বুট কাট প্যান্ট' },
-    { id: 4, name: 'Gurkha Pants', category: 'Pants', price: 1500, originalPrice: 2200, stock: 60, image: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=300&h=300&fit=crop', rating: 4.6, reviews: [], description: 'গোর্খা প্যান্ট' },
-    { id: 5, name: 'Polo T-shirt', category: 'T-shirt', price: 650, originalPrice: 1000, stock: 80, image: 'https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?w=300&h=300&fit=crop', rating: 4.3, reviews: [], description: 'পোলো টি-শার্ট' },
-    { id: 6, name: 'Solid Oxford Lacoste Shirt', category: 'Shirt', price: 950, originalPrice: 1500, stock: 40, image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=300&h=300&fit=crop', rating: 4.7, reviews: [], description: 'অক্সফোর্ড লাকোস্ট শার্ট' },
-    { id: 7, name: 'Baggy Jeans', category: 'Pants', price: 1100, originalPrice: 1700, stock: 55, image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=300&h=300&fit=crop', rating: 4.4, reviews: [], description: 'ব্যাগি জিন্স' },
-    { id: 8, name: 'Band Collar Shirt', category: 'Shirt', price: 780, originalPrice: 1300, stock: 35, image: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=300&h=300&fit=crop', rating: 4.1, reviews: [], description: 'ব্যান্ড কলার শার্ট' },
-    { id: 9, name: 'Smart Watch Pro', category: 'Electronics', price: 3500, originalPrice: 7000, stock: 45, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop', rating: 4.5, reviews: [], description: 'স্মার্ট ওয়াচ প্রো' },
-    { id: 10, name: 'Wireless Headphone', category: 'Electronics', price: 2500, originalPrice: 4500, stock: 60, image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop', rating: 4.6, reviews: [], description: 'ওয়্যারলেস হেডফোন' }
+    { id: 1, name: 'Drop Shoulder T-shirt', category: 'T-shirt', price: 350, originalPrice: 700, stock: 45, image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop', video: '', rating: 4.5, reviews: [], description: 'প্রিমিয়াম ড্রপ শোল্ডার টি-শার্ট', downloadable: true },
+    { id: 2, name: 'Solid Formal Shirt', category: 'Shirt', price: 850, originalPrice: 1200, stock: 120, image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=300&h=300&fit=crop', video: '', rating: 4.2, reviews: [], description: 'ফর্মাল শার্ট', downloadable: true },
+    { id: 3, name: 'Boot Cut Pant', category: 'Pants', price: 1200, originalPrice: 1800, stock: 30, image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=300&h=300&fit=crop', video: '', rating: 4.8, reviews: [], description: 'বুট কাট প্যান্ট', downloadable: true },
+    { id: 4, name: 'Gurkha Pants', category: 'Pants', price: 1500, originalPrice: 2200, stock: 60, image: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=300&h=300&fit=crop', video: '', rating: 4.6, reviews: [], description: 'গোর্খা প্যান্ট', downloadable: true },
+    { id: 5, name: 'Polo T-shirt', category: 'T-shirt', price: 650, originalPrice: 1000, stock: 80, image: 'https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?w=300&h=300&fit=crop', video: '', rating: 4.3, reviews: [], description: 'পোলো টি-শার্ট', downloadable: true },
+    { id: 6, name: 'Solid Oxford Lacoste Shirt', category: 'Shirt', price: 950, originalPrice: 1500, stock: 40, image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=300&h=300&fit=crop', video: '', rating: 4.7, reviews: [], description: 'অক্সফোর্ড লাকোস্ট শার্ট', downloadable: true },
+    { id: 7, name: 'Baggy Jeans', category: 'Pants', price: 1100, originalPrice: 1700, stock: 55, image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=300&h=300&fit=crop', video: '', rating: 4.4, reviews: [], description: 'ব্যাগি জিন্স', downloadable: true },
+    { id: 8, name: 'Band Collar Shirt', category: 'Shirt', price: 780, originalPrice: 1300, stock: 35, image: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=300&h=300&fit=crop', video: '', rating: 4.1, reviews: [], description: 'ব্যান্ড কলার শার্ট', downloadable: true },
+    { id: 9, name: 'Smart Watch Pro', category: 'Electronics', price: 3500, originalPrice: 7000, stock: 45, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop', video: '', rating: 4.5, reviews: [], description: 'স্মার্ট ওয়াচ প্রো', downloadable: true },
+    { id: 10, name: 'Wireless Headphone', category: 'Electronics', price: 2500, originalPrice: 4500, stock: 60, image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop', video: '', rating: 4.6, reviews: [], description: 'ওয়্যারলেস হেডফোন', downloadable: true }
   ],
   orders: [],
   notifications: [],
@@ -56,7 +58,7 @@ const DEFAULT_DATA = {
   transactions: [],
   withdrawals: [],
   packages: [
-    { id: 1, name: '6 Month Package', duration: '6 মাসের মেয়াদ', price: 295, originalPrice: 590, discount: 50, features: ['6 মাস বৈধতা', 'সম্পূর্ণ প্যানেল অ্যাক্সেস', '২৪/৭ সাপোর্ট', 'সকল ফিচার সক্রিয়'], popular: false },
+    { id: 1, name: '6 Month Package', duration: '6 মাসের মেয়াদ', price: 295, originalPrice: 590, discount: 50, features: ['6 মাস বৈধতা', 'সম্পূর্ণ প্যানেল অ্যাক্সেস', '২/৭ সাপোর্ট', 'সকল ফিচার সক্রিয়'], popular: false },
     { id: 2, name: '1 Year Package', duration: '12 মাসের মেয়াদ', price: 480, originalPrice: 1200, discount: 60, features: ['12 মাস বৈধতা', 'সম্পূর্ণ প্যানেল অ্যাক্সেস', '২/৭ সাপোর্ট', 'সকল ফিচার সক্রিয়'], popular: true }
   ]
 };
@@ -69,7 +71,8 @@ let state = {
   selectedCategory: 'all',
   searchQuery: '',
   dashboardView: 'home',
-  userDropdown: false
+  userDropdown: false,
+  notifDropdown: false
 };
 
 function loadData() {
@@ -151,6 +154,12 @@ function addNotification(userId, message, type) {
   saveData();
 }
 
+function notifyAllUsers(message, type) {
+  for (var i = 0; i < DEFAULT_DATA.users.length; i++) {
+    addNotification(DEFAULT_DATA.users[i].id, message, type);
+  }
+}
+
 function getStatusColor(status) {
   var colors = { 
     'Pending': 'bg-yellow-100 text-yellow-800', 
@@ -162,7 +171,39 @@ function getStatusColor(status) {
   return colors[status] || 'bg-gray-100 text-gray-800';
 }
 
-// ==================== FIXED LOGOUT FUNCTION ====================
+// File upload handler
+function handleFileUpload(inputId, callback) {
+  var input = document.getElementById(inputId);
+  if (input && input.files && input.files[0]) {
+    var file = input.files[0];
+    if (file.size > 5 * 1024 * 1024) {
+      showToast('ফাইল সাইজ ৫MB এর কম হতে হবে!', 'error');
+      return;
+    }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      callback(e.target.result);
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Download function
+function downloadFile(dataUrl, filename) {
+  if (!dataUrl) {
+    showToast('ডাউনলোড করার মতো কিছু নেই!', 'error');
+    return;
+  }
+  var link = document.createElement('a');
+  link.href = dataUrl;
+  link.download = filename || 'download';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  showToast('ডাউনলোড শুরু হয়েছে!', 'success');
+}
+
+// FIXED LOGOUT FUNCTION - Global
 window.doLogout = function() {
   try {
     console.log('Logout clicked');
@@ -170,11 +211,8 @@ window.doLogout = function() {
     state.currentView = 'home';
     state.dashboardView = 'home';
     state.userDropdown = false;
-    state.cart = [];
-    state.wishlist = [];
+    state.notifDropdown = false;
     localStorage.removeItem('ohds_current_user');
-    localStorage.removeItem('ohds_cart');
-    localStorage.removeItem('ohds_wishlist');
     showToast('লগআউট সফল হয়েছে!', 'info');
     setTimeout(function() {
       renderApp();
@@ -194,7 +232,7 @@ function renderNavbar() {
     '<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">' +
     '<div class="flex justify-between items-center h-16">' +
     '<div class="flex items-center gap-2 cursor-pointer" onclick="state.currentView=\'home\';renderApp();">' +
-    '<span class="text-2xl font-black text-gray-900">🎩 OnlineHatDropShop</span>' +
+    '<span class="text-2xl font-black text-gray-900"> OnlineHatDropShop</span>' +
     '</div>' +
     '<div class="hidden md:flex items-center gap-6">' +
     '<button type="button" onclick="state.currentView=\'home\';renderApp();" class="text-gray-700 hover:text-indigo-600 font-medium">হোম</button>' +
@@ -251,12 +289,12 @@ function renderStats() {
 
 function renderFeatures() {
   const features = [
-    { icon: '📦', title: 'ইউনিক প্রোডাক্ট কালেকশন', desc: 'স্বতন্ত্র ও ট্রেন্ডি ইউনিক প্রোডাক্টস সমাহার', color: 'bg-indigo-100 text-indigo-600' },
-    { icon: '🚚', title: 'দ্রুত ডেলিভারি', desc: '৬৪টি জেলায় ক্যাশ অন ডেলিভারি', color: 'bg-blue-100 text-blue-600' },
-    { icon: '💰', title: '২৪/৭ পেমেন্ট', desc: 'যেকোনো সময় পেমেন্ট রিকোয়ারি', color: 'bg-purple-100 text-purple-600' },
+    { icon: '', title: 'ইউনিক প্রোডাক্ট কালেকশন', desc: 'স্বতন্ত্র ও ট্রেন্ডি ইউনিক প্রোডাক্টস সমাহার', color: 'bg-indigo-100 text-indigo-600' },
+    { icon: '', title: 'দ্রুত ডেলিভারি', desc: '৬৪টি জেলায় ক্যাশ অন ডেলিভারি', color: 'bg-blue-100 text-blue-600' },
+    { icon: '💰', title: '২/৭ পেমেন্ট', desc: 'যেকোনো সময় পেমেন্ট রিকোয়ারি', color: 'bg-purple-100 text-purple-600' },
     { icon: '🏷️', title: 'হোয়াইট লেবেল', desc: 'আপনার ব্র্যান্ড নামে ডেলিভারি', color: 'bg-yellow-100 text-yellow-600' },
     { icon: '🎧', title: 'ডেডিকেটেড সাপোর্ট', desc: 'সাপোর্ট টিম সর্বদা প্রস্তুত', color: 'bg-pink-100 text-pink-600' },
-    { icon: '', title: 'মার্কেটিং ম্যাটেরিয়ালস', desc: 'হাই-কোয়ালিটি ছবি ও ভিডিও', color: 'bg-green-100 text-green-600' }
+    { icon: '📈', title: 'মার্কেটিং ম্যাটেরিয়ালস', desc: 'হাই-কোয়ালিটি ছবি ও ভিডিও', color: 'bg-green-100 text-green-600' }
   ];
   let html = '<section id="features" class="py-16 bg-slate-50"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">' +
     '<div class="text-center mb-12"><p class="text-indigo-600 font-semibold mb-2">কেন আমাদের বেছে নেবেন</p>' +
@@ -323,7 +361,7 @@ function renderFooter() {
     '<div><span class="text-2xl font-black">🎩 OnlineHatDropShop</span><p class="text-gray-400 text-sm mt-2">বাংলাদেশের #1 Dropshipping প্ল্যাটফর্ম</p></div>' +
     '<div><h4 class="font-bold mb-3">লিংকসমূহ</h4><ul class="space-y-2 text-sm text-gray-400"><li>হোম</li><li>আমাদের সম্পর্কে</li></ul></div>' +
     '<div><h4 class="font-bold mb-3">সাপোর্ট</h4><ul class="space-y-2 text-sm text-gray-400"><li>হেল্প সেন্টার</li><li>প্রাইভেসি পলিসি</li></ul></div>' +
-    '<div><h4 class="font-bold mb-3">যোগাযোগ</h4><ul class="space-y-2 text-sm text-gray-400"><li>📍 Mirpur 1, Dhaka</li><li>📞 01872715842</li><li>✉️ ehub.official01@gmail.com</li></ul></div>' +
+    '<div><h4 class="font-bold mb-3">যোগাযোগ</h4><ul class="space-y-2 text-sm text-gray-400"><li>📍 Mirpur 1, Dhaka</li><li>📞 01872715842</li><li>️ ehub.official01@gmail.com</li></ul></div>' +
     '</div><div class="border-t border-gray-800 pt-6 text-center text-sm text-gray-500"><p>© 2026 OnlineHatDropShop। সর্বস্বত্ব সংরক্ষিত।</p></div></div></footer>';
 }
 
@@ -511,7 +549,7 @@ function renderSidebar() {
   var isAdmin = (u.role === 'CEO' || u.role === 'Admin');
   var menuItems = [
     { id: 'home', icon: '🏠', label: 'হোম' },
-    { id: 'products', icon: '📦', label: 'প্রোডাক্টস' },
+    { id: 'products', icon: '', label: 'প্রোডাক্টস' },
     { id: 'cart', icon: '🛒', label: 'কার্ট (' + state.cart.length + ')' },
     { id: 'orders', icon: '📋', label: 'অর্ডার' },
     { id: 'wishlist', icon: '❤️', label: 'উইশলিস্ট' },
@@ -547,21 +585,53 @@ function renderSidebar() {
 function renderTopbar(unreadNotifs) {
   var u = state.currentUser;
   var userMenu = state.userDropdown ? 
-    '<div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50">' +
+    '<div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50 notif-dropdown">' +
     '<div class="px-4 py-2 border-b border-gray-100"><p class="font-semibold text-gray-900 text-sm">' + u.name + '</p><p class="text-xs text-gray-500">' + u.email + '</p></div>' +
     '<button type="button" onclick="state.dashboardView=\'profile\';state.userDropdown=false;renderApp();" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">👤 প্রোফাইল</button>' +
     '<button type="button" onclick="doLogout()" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50">🚪 লগআউট</button></div>' : '';
+  
+  // Notification dropdown
+  var notifMenu = '';
+  if (state.notifDropdown) {
+    var userNotifs = DEFAULT_DATA.notifications.filter(function(n) { return n.userId === u.id; }).reverse().slice(0, 10);
+    notifMenu = '<div class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-100 z-50 notif-dropdown max-h-96 overflow-y-auto">' +
+      '<div class="p-3 border-b border-gray-100 flex justify-between items-center">' +
+      '<h3 class="font-bold text-gray-900">নোটিফিকেশন</h3>' +
+      '<button type="button" onclick="markAllRead()" class="text-xs text-indigo-600 hover:underline">সব পড়া</button></div>';
+    if (userNotifs.length === 0) {
+      notifMenu += '<div class="p-6 text-center text-gray-500"><p class="text-3xl mb-2">🔔</p><p class="text-sm">কোনো নোটিফিকেশন নেই</p></div>';
+    } else {
+      notifMenu += '<div class="divide-y divide-gray-100">';
+      for (var i = 0; i < userNotifs.length; i++) {
+        var n = userNotifs[i];
+        var icon = n.type === 'success' ? '✅' : (n.type === 'error' ? '❌' : 'ℹ️');
+        notifMenu += '<div class="p-3 hover:bg-gray-50 ' + (n.read ? '' : 'bg-blue-50') + '">' +
+          '<div class="flex items-start gap-2">' +
+          '<span class="text-lg">' + icon + '</span>' +
+          '<div class="flex-1"><p class="text-sm ' + (n.read ? 'text-gray-600' : 'font-semibold text-gray-900') + '">' + n.message + '</p>' +
+          '<p class="text-xs text-gray-400 mt-1">' + new Date(n.createdAt).toLocaleString() + '</p></div>' +
+          (!n.read ? '<button type="button" onclick="markRead(' + n.id + ')" class="text-xs text-indigo-600">পড়া</button>' : '') +
+          '</div></div>';
+      }
+      notifMenu += '</div>';
+    }
+    notifMenu += '<div class="p-2 border-t border-gray-100"><button type="button" onclick="state.dashboardView=\'notifications\';state.notifDropdown=false;renderApp();" class="w-full text-center text-sm text-indigo-600 hover:underline font-medium">সব নোটিফিকেশন দেখুন →</button></div></div>';
+  }
+  
   return '<header class="bg-white border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between sticky top-0 z-20">' +
     '<div class="flex items-center gap-4 flex-1">' +
     '<h1 class="text-lg font-bold text-gray-900 hidden md:block">ড্যাশবোর্ড</h1>' +
     '<div class="relative flex-1 max-w-md">' +
-    '<span class="absolute left-3 top-2.5 text-gray-400">🔍</span>' +
+    '<span class="absolute left-3 top-2.5 text-gray-400"></span>' +
     '<input type="text" class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:ring-2 focus:ring-indigo-500" placeholder="প্রোডাক্ট খুঁজুন..."></div></div>' +
     '<div class="flex items-center gap-3">' +
     '<div class="relative">' +
-    '<button type="button" onclick="state.dashboardView=\'notifications\';renderApp();" class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">' + (unreadNotifs > 0 ? '<span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>' : '') + '</button></div>' +
+    '<button type="button" onclick="state.notifDropdown=!state.notifDropdown;state.userDropdown=false;renderApp();" class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">' +
+    '🔔' + (unreadNotifs > 0 ? '<span class="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">' + unreadNotifs + '</span>' : '') +
+    '</button>' + notifMenu +
+    '</div>' +
     '<div class="relative">' +
-    '<button type="button" onclick="state.userDropdown=!state.userDropdown;renderApp();" class="flex items-center gap-2 p-1 hover:bg-gray-100 rounded-lg">' +
+    '<button type="button" onclick="state.userDropdown=!state.userDropdown;state.notifDropdown=false;renderApp();" class="flex items-center gap-2 p-1 hover:bg-gray-100 rounded-lg">' +
     '<div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">' + u.name.charAt(0) + '</div>' +
     '<span class="hidden md:block text-sm font-medium text-gray-700">' + u.name + '</span><span class="text-gray-400 text-xs">▼</span></button>' + userMenu +
     '</div></div></header>';
@@ -596,7 +666,7 @@ function renderDashHome() {
   ];
   var html = '<div class="fade-in">' +
     '<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">' +
-    '<div><h2 class="text-2xl font-black text-gray-900">স্বাগতম, ' + u.name + ' </h2><p class="text-gray-600 text-sm">আজকের ব্যবসার সারসংক্ষেপ</p></div>' +
+    '<div><h2 class="text-2xl font-black text-gray-900">স্বাগতম, ' + u.name + ' 👋</h2><p class="text-gray-600 text-sm">আজকের ব্যবসার সারসংক্ষেপ</p></div>' +
     '<button type="button" onclick="state.dashboardView=\'products\';renderApp();" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700">+ নতুন অর্ডার</button></div>';
   html += '<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">';
   for (var i = 0; i < stats.length; i++) {
@@ -612,7 +682,7 @@ function renderDashHome() {
   html += '<div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">' +
     '<div class="flex justify-between items-center mb-4"><h3 class="font-bold text-gray-900">সাম্প্রতিক অর্ডার</h3><button type="button" onclick="state.dashboardView=\'orders\';renderApp();" class="text-indigo-600 text-sm font-medium">সব দেখুন →</button></div>';
   if (userOrders.length === 0) {
-    html += '<div class="text-center py-8 text-gray-400"><p class="text-4xl mb-2"></p><p>এখানে কোনো অর্ডার নেই</p><button type="button" onclick="state.dashboardView=\'products\';renderApp();" class="text-indigo-600 text-sm mt-2 font-medium">প্রোডাক্ট দেখুন →</button></div>';
+    html += '<div class="text-center py-8 text-gray-400"><p class="text-4xl mb-2">📭</p><p>এখানে কোনো অর্ডার নেই</p><button type="button" onclick="state.dashboardView=\'products\';renderApp();" class="text-indigo-600 text-sm mt-2 font-medium">প্রোডাক্ট দেখুন →</button></div>';
   } else {
     html += '<div class="space-y-2">';
     var recent = userOrders.slice(-5).reverse();
@@ -653,14 +723,24 @@ function renderDashProductCard(p) {
   var discount = Math.round((1 - p.price / p.originalPrice) * 100);
   var inWishlist = state.wishlist.indexOf(p.id) !== -1;
   var inCart = state.cart.find(function(c) { return c.id === p.id; });
+  var hasVideo = p.video ? true : false;
+  var isBase64Image = p.image && p.image.startsWith('data:');
+  var isBase64Video = p.video && p.video.startsWith('data:');
+  
   return '<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden card-hover">' +
-    '<div class="relative"><img src="' + p.image + '" class="w-full h-48 object-cover">' +
+    '<div class="relative">' +
+    '<img src="' + p.image + '" class="w-full h-48 object-cover">' +
     (discount > 0 ? '<span class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded font-bold">' + discount + '% OFF</span>' : '') +
+    (hasVideo ? '<span class="absolute top-2 right-12 bg-purple-500 text-white text-xs px-2 py-1 rounded font-bold">🎬 ভিডিও</span>' : '') +
     '<button type="button" onclick="toggleWishlist(' + p.id + ')" class="absolute top-2 right-2 bg-white p-2 rounded-full shadow">' + (inWishlist ? '❤️' : '🤍') + '</button></div>' +
     '<div class="p-4"><p class="text-xs text-gray-500 mb-1">' + p.category + '</p>' +
     '<h3 class="font-semibold text-gray-900 truncate mb-2">' + p.name + '</h3>' +
     '<div class="flex items-center gap-2 mb-2"><span class="text-lg font-bold text-indigo-600">৳' + p.price + '</span><span class="text-sm text-gray-400 line-through">৳' + p.originalPrice + '</span></div>' +
     '<p class="text-xs text-green-600 mb-3">স্টক: ' + p.stock + '</p>' +
+    '<div class="flex gap-2 mb-2">' +
+    (isBase64Image ? '<button type="button" onclick="downloadFile(\'' + p.image + '\', \'' + p.name.replace(/[^a-zA-Z0-9]/g, '_') + '.jpg\')" class="flex-1 text-xs bg-blue-100 text-blue-700 px-2 py-1.5 rounded hover:bg-blue-200 font-medium">📥 ছবি</button>' : '') +
+    (isBase64Video ? '<button type="button" onclick="downloadFile(\'' + p.video + '\', \'' + p.name.replace(/[^a-zA-Z0-9]/g, '_') + '.mp4\')" class="flex-1 text-xs bg-purple-100 text-purple-700 px-2 py-1.5 rounded hover:bg-purple-200 font-medium">📥 ভিডিও</button>' : '') +
+    '</div>' +
     '<button type="button" onclick="addToCart(' + p.id + ')" ' + (inCart ? 'disabled' : '') + ' class="w-full py-2 rounded-lg font-medium ' + (inCart ? 'bg-green-100 text-green-700' : 'bg-indigo-600 text-white hover:bg-indigo-700') + '">' + (inCart ? '✓ কার্টে আছে' : 'কার্টে যোগ করুন') + '</button></div></div>';
 }
 
@@ -676,7 +756,7 @@ function renderDashCart() {
     itemsHtml += '<div class="bg-white rounded-xl p-4 shadow-sm flex gap-4 border border-gray-100">' +
       '<img src="' + p.image + '" class="w-24 h-24 object-cover rounded-lg">' +
       '<div class="flex-1"><h3 class="font-semibold text-gray-900">' + p.name + '</h3><p class="text-sm text-gray-500 mb-2">৳' + p.price + '</p>' +
-      '<div class="flex items-center gap-2"><button type="button" onclick="updateCartQty(' + p.id + ',-1)" class="w-8 h-8 bg-gray-200 rounded-lg font-bold">-</button><span class="font-bold w-8 text-center">' + c.qty + '</span><button type="button" onclick="updateCartQty(' + p.id + ',1)" class="w-8 h-8 bg-gray-200 rounded-lg font-bold">+</button><button type="button" onclick="removeFromCart(' + p.id + ')" class="ml-auto text-red-500">️</button></div></div>' +
+      '<div class="flex items-center gap-2"><button type="button" onclick="updateCartQty(' + p.id + ',-1)" class="w-8 h-8 bg-gray-200 rounded-lg font-bold">-</button><span class="font-bold w-8 text-center">' + c.qty + '</span><button type="button" onclick="updateCartQty(' + p.id + ',1)" class="w-8 h-8 bg-gray-200 rounded-lg font-bold">+</button><button type="button" onclick="removeFromCart(' + p.id + ')" class="ml-auto text-red-500">🗑️</button></div></div>' +
       '<div class="font-bold text-indigo-600 flex items-center">৳' + (p.price * c.qty) + '</div></div>';
   }
   var shipping = 60;
@@ -758,7 +838,7 @@ function renderDashProfile() {
     '<div><label class="block text-sm font-medium mb-1 text-gray-700">শপ নাম</label><input type="text" id="prof-shop" value="' + (u.shopName||'') + '" class="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900"></div>' +
     '</div>' +
     '<div class="border-t pt-4 mt-2">' +
-    '<h3 class="font-bold text-gray-900 mb-3"> পাসওয়ার্ড পরিবর্তন</h3>' +
+    '<h3 class="font-bold text-gray-900 mb-3">🔒 পাসওয়ার্ড পরিবর্তন</h3>' +
     '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">' +
     '<div><label class="block text-sm font-medium mb-1 text-gray-700">বর্তমান পাসওয়ার্ড</label><input type="password" id="prof-old-pass" class="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900" placeholder="বর্তমান পাসওয়ার্ড"></div>' +
     '<div><label class="block text-sm font-medium mb-1 text-gray-700">নতুন পাসওয়ার্ড</label><input type="password" id="prof-new-pass" class="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900" placeholder="নতুন পাসওয়ার্ড (৬+ অক্ষর)"></div>' +
@@ -817,6 +897,7 @@ function confirmPackage(id) {
   renderApp();
 }
 
+// Admin Panel with product upload with image/video from gallery
 function renderAdminPanel() {
   var u = state.currentUser;
   if (u.role !== 'CEO' && u.role !== 'Admin') {
@@ -838,8 +919,9 @@ function renderAdminPanel() {
   html += '<div class="flex gap-2 mb-4 border-b border-gray-200 pb-2 overflow-x-auto">' +
     '<button type="button" onclick="showAdminTab(\'users\')" id="tab-users" class="px-4 py-2 rounded-t-lg font-medium bg-indigo-600 text-white whitespace-nowrap">👥 ইউজার ম্যানেজমেন্ট</button>' +
     '<button type="button" onclick="showAdminTab(\'products\')" id="tab-products" class="px-4 py-2 rounded-t-lg font-medium bg-gray-200 text-gray-700 whitespace-nowrap">📦 প্রোডাক্ট ম্যানেজমেন্ট</button>' +
-    '<button type="button" onclick="showAdminTab(\'broadcast\')" id="tab-broadcast" class="px-4 py-2 rounded-t-lg font-medium bg-gray-200 text-gray-700 whitespace-nowrap">📢 ব্রডকাস্ট</button></div>';
+    '<button type="button" onclick="showAdminTab(\'broadcast\')" id="tab-broadcast" class="px-4 py-2 rounded-t-lg font-medium bg-gray-200 text-gray-700 whitespace-nowrap"> নোটিফিকেশন</button></div>';
   
+  // Users Tab
   html += '<div id="admin-tab-users" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-6">' +
     '<div class="flex justify-between items-center mb-4">' +
     '<h3 class="font-bold text-lg text-gray-900">ইউজার লিস্ট (ক্লিক করে এডিট করুন)</h3>' +
@@ -852,9 +934,10 @@ function renderAdminPanel() {
       '<td class="p-2"><p class="font-semibold text-gray-900">' + usr.name + '</p><p class="text-xs text-gray-500">@' + usr.username + '</p><p class="text-xs text-gray-400">' + usr.email + '</p></td>' +
       '<td class="p-2"><span class="text-xs px-2 py-1 rounded bg-gray-100 text-gray-700">' + usr.role + '</span></td>' +
       '<td class="p-2"><span class="font-medium text-gray-900">৳' + usr.balance + '</span></td>' +
-      '<td class="p-2"><span class="text-xs px-2 py-1 rounded ' + (usr.verified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800') + '">' + (usr.verified ? '✅' : '⚠️') + '</span></td>' +
+      '<td class="p-2"><span class="text-xs px-2 py-1 rounded ' + (usr.verified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800') + '">' + (usr.verified ? '✅' : '️') + '</span></td>' +
       '<td class="p-2"><div class="flex gap-1 flex-wrap">' +
       '<button type="button" onclick="event.stopPropagation();editUserFull(' + usr.id + ')" class="text-xs bg-indigo-100 text-indigo-800 px-2 py-1 rounded hover:bg-indigo-200">✏️ এডিট</button>' +
+      '<button type="button" onclick="event.stopPropagation();sendNotifToUser(' + usr.id + ')" class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded hover:bg-purple-200">🔔 নোটিফাই</button>' +
       '<button type="button" onclick="event.stopPropagation();toggleUserVerify(' + usr.id + ')" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded hover:bg-green-200">✓</button>' +
       '<button type="button" onclick="event.stopPropagation();resetUserPassword(' + usr.id + ')" class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded hover:bg-blue-200">🔑</button>' +
       (usr.id !== u.id ? '<button type="button" onclick="event.stopPropagation();deleteUser(' + usr.id + ')" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded hover:bg-red-200">🗑️</button>' : '') +
@@ -862,6 +945,7 @@ function renderAdminPanel() {
   }
   html += '</tbody></table></div></div>';
   
+  // Products Tab
   html += '<div id="admin-tab-products" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-6 hidden">' +
     '<div class="flex justify-between items-center mb-4">' +
     '<h3 class="font-bold text-lg text-gray-900">প্রোডাক্ট লিস্ট</h3>' +
@@ -869,23 +953,37 @@ function renderAdminPanel() {
     '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">';
   for (var j = 0; j < DEFAULT_DATA.products.length; j++) {
     var prod = DEFAULT_DATA.products[j];
+    var hasVideo = prod.video ? '🎬' : '';
     html += '<div class="bg-gray-50 rounded-xl overflow-hidden border border-gray-200">' +
       '<img src="' + prod.image + '" class="w-full h-32 object-cover">' +
       '<div class="p-3">' +
-      '<p class="font-semibold text-sm text-gray-900 truncate">' + prod.name + '</p>' +
+      '<p class="font-semibold text-sm text-gray-900 truncate">' + prod.name + ' ' + hasVideo + '</p>' +
       '<p class="text-xs text-gray-500">' + prod.category + ' • স্টক: ' + prod.stock + '</p>' +
-      '<p class="text-sm font-bold text-indigo-600 mt-1">' + prod.price + '</p>' +
+      '<p class="text-sm font-bold text-indigo-600 mt-1">৳' + prod.price + '</p>' +
       '<div class="flex gap-1 mt-2">' +
       '<button type="button" onclick="editProduct(' + prod.id + ')" class="flex-1 text-xs bg-indigo-100 text-indigo-800 px-2 py-1 rounded hover:bg-indigo-200">✏️ এডিট</button>' +
-      '<button type="button" onclick="deleteProduct(' + prod.id + ')" class="flex-1 text-xs bg-red-100 text-red-800 px-2 py-1 rounded hover:bg-red-200">🗑️ ডিলিট</button>' +
+      '<button type="button" onclick="deleteProduct(' + prod.id + ')" class="flex-1 text-xs bg-red-100 text-red-800 px-2 py-1 rounded hover:bg-red-200">️ ডিলিট</button>' +
       '</div></div></div>';
   }
   html += '</div></div>';
   
+  // Broadcast Tab
   html += '<div id="admin-tab-broadcast" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hidden">' +
-    '<h3 class="font-bold text-lg mb-4 text-gray-900">ব্রডকাস্ট নোটিফিকেশন</h3>' +
-    '<div class="space-y-3"><textarea id="broadcast-message" class="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900" rows="3" placeholder="মেসেজ লিখুন..."></textarea>' +
-    '<button type="button" onclick="sendBroadcast()" class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700">সবাইকে পাঠান</button></div></div></div>';
+    '<h3 class="font-bold text-lg mb-4 text-gray-900"> নোটিফিকেশন পাঠান</h3>' +
+    '<div class="space-y-3">' +
+    '<div><label class="block text-sm font-medium text-gray-700 mb-1">কাকে পাঠাবেন?</label>' +
+    '<select id="broadcast-target" class="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900">' +
+    '<option value="all">সব ইউজার</option>';
+  for (var k = 0; k < DEFAULT_DATA.users.length; k++) {
+    var usr2 = DEFAULT_DATA.users[k];
+    if (usr2.id !== u.id) {
+      html += '<option value="' + usr2.id + '">' + usr2.name + ' (@' + usr2.username + ')</option>';
+    }
+  }
+  html += '</select></div>' +
+    '<div><label class="block text-sm font-medium text-gray-700 mb-1">মেসেজ</label>' +
+    '<textarea id="broadcast-message" class="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900" rows="3" placeholder="মেসেজ লিখুন..."></textarea></div>' +
+    '<button type="button" onclick="sendBroadcast()" class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700">পাঠান</button></div></div></div>';
   return html;
 }
 
@@ -968,6 +1066,29 @@ function saveUserFull(id) {
   renderApp();
 }
 
+// Send notification to specific user
+function sendNotifToUser(userId) {
+  var u = DEFAULT_DATA.users.find(function(x) { return x.id === userId; });
+  if (!u) return;
+  showModal('<div class="p-6">' +
+    '<h2 class="text-2xl font-bold mb-4 text-gray-900">' + u.name + ' কে নোটিফিকেশন পাঠান</h2>' +
+    '<div class="space-y-3">' +
+    '<div><label class="block text-sm font-medium text-gray-700 mb-1">মেসেজ</label>' +
+    '<textarea id="notif-message" class="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900" rows="3" placeholder="মেসেজ লিখুন..."></textarea></div>' +
+    '</div>' +
+    '<div class="flex gap-2 mt-4"><button type="button" onclick="closeModal()" class="flex-1 bg-gray-200 text-gray-800 py-3 rounded-lg font-medium">বাতিল</button>' +
+    '<button type="button" onclick="sendSingleNotif(' + userId + ')" class="flex-1 bg-purple-600 text-white py-3 rounded-lg font-semibold">পাঠান</button></div></div>');
+}
+
+function sendSingleNotif(userId) {
+  var message = document.getElementById('notif-message').value.trim();
+  if (!message) { showToast('মেসেজ লিখুন!', 'error'); return; }
+  addNotification(userId, message, 'info');
+  closeModal();
+  showToast('নোটিফিকেশন পাঠানো হয়েছে!', 'success');
+}
+
+// Product Add Form with image/video upload from gallery
 function showAddProductForm() {
   showModal('<div class="p-6">' +
     '<h2 class="text-2xl font-bold mb-4 text-gray-900">নতুন প্রোডাক্ট যোগ করুন</h2>' +
@@ -979,8 +1100,16 @@ function showAddProductForm() {
     '<div><label class="block text-sm font-medium text-gray-700 mb-1">বিক্রয় মূল্য</label><input type="number" id="np-price" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900" placeholder="0"></div>' +
     '<div><label class="block text-sm font-medium text-gray-700 mb-1">আসল মূল্য</label><input type="number" id="np-original" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900" placeholder="0"></div>' +
     '</div>' +
-    '<div><label class="block text-sm font-medium text-gray-700 mb-1">ইমেজ URL</label><input type="text" id="np-image" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900" placeholder="https://..."></div>' +
+    '<div><label class="block text-sm font-medium text-gray-700 mb-1">ছবি আপলোড (Gallery থেকে)</label>' +
+    '<input type="file" id="np-image-file" accept="image/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm">' +
+    '<p class="text-xs text-gray-500 mt-1">অথবা URL দিন:</p>' +
+    '<input type="text" id="np-image" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm" placeholder="https://..."></div>' +
+    '<div><label class="block text-sm font-medium text-gray-700 mb-1">ভিডিও আপলোড (Gallery থেকে - ঐচ্ছিক)</label>' +
+    '<input type="file" id="np-video-file" accept="video/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm">' +
+    '<p class="text-xs text-gray-500 mt-1">অথবা URL দিন:</p>' +
+    '<input type="text" id="np-video" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm" placeholder="ভিডিও URL (ঐচ্ছিক)"></div>' +
     '<div><label class="block text-sm font-medium text-gray-700 mb-1">বিবরণ</label><textarea id="np-desc" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900" rows="2" placeholder="প্রোডাক্টের বিবরণ"></textarea></div>' +
+    '<div class="flex items-center gap-2"><input type="checkbox" id="np-downloadable" checked class="rounded"><label class="text-sm text-gray-700">সবাই ডাউনলোড করতে পারবে</label></div>' +
     '</div>' +
     '<div class="flex gap-2 mt-4"><button type="button" onclick="closeModal()" class="flex-1 bg-gray-200 text-gray-800 py-3 rounded-lg font-medium">বাতিল</button>' +
     '<button type="button" onclick="saveNewProduct()" class="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold">সেভ করুন</button></div></div>');
@@ -993,7 +1122,9 @@ function saveNewProduct() {
   var price = parseFloat(document.getElementById('np-price').value) || 0;
   var originalPrice = parseFloat(document.getElementById('np-original').value) || 0;
   var image = document.getElementById('np-image').value.trim();
+  var video = document.getElementById('np-video').value.trim();
   var description = document.getElementById('np-desc').value.trim();
+  var downloadable = document.getElementById('np-downloadable').checked;
   
   if (!name || !price || !originalPrice) { showToast('নাম ও মূল্য দিন!', 'error'); return; }
   if (!image) image = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop';
@@ -1002,19 +1133,27 @@ function saveNewProduct() {
     id: Date.now(),
     name: name, category: category, price: price,
     originalPrice: originalPrice, stock: stock,
-    image: image, rating: 4.0, reviews: [],
-    description: description || name
+    image: image, video: video, rating: 4.0, reviews: [],
+    description: description || name,
+    downloadable: downloadable
   };
   DEFAULT_DATA.products.push(newProduct);
   saveData();
+  
+  // Auto notify all users about new product
+  notifyAllUsers('🎉 নতুন প্রোডাক্ট যোগ হয়েছে: ' + name + ' - ৳' + price, 'success');
+  
   closeModal();
-  showToast('প্রোডাক্ট সফলভাবে যোগ হয়েছে!', 'success');
+  showToast('প্রোডাক্ট সফলভাবে যোগ হয়েছে! সবাইকে নোটিফিকেশন পাঠানো হয়েছে।', 'success');
   renderApp();
 }
 
 function editProduct(id) {
   var p = DEFAULT_DATA.products.find(function(x) { return x.id === id; });
   if (!p) return;
+  var isBase64Image = p.image && p.image.startsWith('data:');
+  var isBase64Video = p.video && p.video.startsWith('data:');
+  
   showModal('<div class="p-6">' +
     '<h2 class="text-2xl font-bold mb-4 text-gray-900">প্রোডাক্ট এডিট</h2>' +
     '<div class="space-y-3">' +
@@ -1025,7 +1164,14 @@ function editProduct(id) {
     '<div><label class="block text-sm font-medium text-gray-700 mb-1">বিক্রয় মূল্য</label><input type="number" id="ep-price" value="' + p.price + '" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900"></div>' +
     '<div><label class="block text-sm font-medium text-gray-700 mb-1">আসল মূল্য</label><input type="number" id="ep-original" value="' + p.originalPrice + '" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900"></div>' +
     '</div>' +
-    '<div><label class="block text-sm font-medium text-gray-700 mb-1">ইমেজ URL</label><input type="text" id="ep-image" value="' + p.image + '" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900"></div>' +
+    '<div><label class="block text-sm font-medium text-gray-700 mb-1">ছবি আপলোড (Gallery থেকে)</label>' +
+    '<input type="file" id="ep-image-file" accept="image/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm">' +
+    '<p class="text-xs text-gray-500 mt-1">অথবা URL:</p>' +
+    '<input type="text" id="ep-image" value="' + (isBase64Image ? '' : p.image) + '" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm" placeholder="https://..."></div>' +
+    '<div><label class="block text-sm font-medium text-gray-700 mb-1">ভিডিও আপলোড (Gallery থেকে)</label>' +
+    '<input type="file" id="ep-video-file" accept="video/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm">' +
+    '<p class="text-xs text-gray-500 mt-1">অথবা URL:</p>' +
+    '<input type="text" id="ep-video" value="' + (isBase64Video ? '' : (p.video || '')) + '" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm" placeholder="ভিডিও URL"></div>' +
     '<div><label class="block text-sm font-medium text-gray-700 mb-1">বিবরণ</label><textarea id="ep-desc" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900" rows="2">' + p.description + '</textarea></div>' +
     '</div>' +
     '<div class="flex gap-2 mt-4"><button type="button" onclick="closeModal()" class="flex-1 bg-gray-200 text-gray-800 py-3 rounded-lg font-medium">বাতিল</button>' +
@@ -1040,8 +1186,34 @@ function saveProductEdit(id) {
   p.stock = parseInt(document.getElementById('ep-stock').value) || 0;
   p.price = parseFloat(document.getElementById('ep-price').value) || 0;
   p.originalPrice = parseFloat(document.getElementById('ep-original').value) || 0;
-  p.image = document.getElementById('ep-image').value.trim();
   p.description = document.getElementById('ep-desc').value.trim();
+  
+  // Handle image upload
+  var imageFile = document.getElementById('ep-image-file');
+  if (imageFile && imageFile.files && imageFile.files[0]) {
+    handleFileUpload('ep-image-file', function(dataUrl) {
+      p.image = dataUrl;
+      finishProductEdit(id, p);
+    });
+  } else {
+    var imageUrl = document.getElementById('ep-image').value.trim();
+    if (imageUrl) p.image = imageUrl;
+    // Handle video upload
+    var videoFile = document.getElementById('ep-video-file');
+    if (videoFile && videoFile.files && videoFile.files[0]) {
+      handleFileUpload('ep-video-file', function(dataUrl) {
+        p.video = dataUrl;
+        finishProductEdit(id, p);
+      });
+    } else {
+      var videoUrl = document.getElementById('ep-video').value.trim();
+      p.video = videoUrl;
+      finishProductEdit(id, p);
+    }
+  }
+}
+
+function finishProductEdit(id, p) {
   saveData();
   closeModal();
   showToast('প্রোডাক্ট আপডেট হয়েছে!', 'success');
@@ -1077,11 +1249,13 @@ function deleteUser(id) {
 }
 
 function sendBroadcast() {
+  var target = document.getElementById('broadcast-target').value;
   var message = document.getElementById('broadcast-message').value.trim();
   if (!message) { showToast('মেসেজ লিখুন!', 'error'); return; }
-  for (var i = 0; i < DEFAULT_DATA.users.length; i++) {
-    var u = DEFAULT_DATA.users[i];
-    if (u.id !== state.currentUser.id) addNotification(u.id, message, 'info');
+  if (target === 'all') {
+    notifyAllUsers(message, 'info');
+  } else {
+    addNotification(parseInt(target), message, 'info');
   }
   saveData();
   showToast('নোটিফিকেশন পাঠানো হয়েছে!', 'success');
