@@ -48,6 +48,9 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
+// 🔥 ImgBB API Key
+const IMGBB_API_KEY = "903443e8bcc03c284c4a880a2648e285";
+
 const DEFAULT_DATA = {
   users: [
     { id: 1, name: 'সাদাত হোসেন', email: 'ceo@hatdrop.com', phone: '01700000001', username: 'ceo_sadat', password: 'ceo123', role: 'CEO', balance: 50000, verified: true, shopName: 'HatDrop HQ', createdAt: '2024-01-01', credits: 1000 },
@@ -90,7 +93,6 @@ let state = {
   sidebarOpen: false
 };
 
-// 🔥 Firebase থেকে ডেটা লোড
 function loadData() {
   try {
     const savedUser = localStorage.getItem('ohds_current_user');
@@ -105,12 +107,9 @@ function loadData() {
     if (savedWishlist) state.wishlist = JSON.parse(savedWishlist);
     setupRealtimeListeners();
     initializeFirebaseData();
-  } catch(e) { 
-    console.error('Load error:', e); 
-  }
+  } catch(e) { console.error('Load error:', e); }
 }
 
-// 🔥 Realtime Listeners
 function setupRealtimeListeners() {
   database.ref('orders').on('value', (snapshot) => {
     const data = snapshot.val();
@@ -159,7 +158,6 @@ function setupRealtimeListeners() {
   showToast('Firebase সংযুক্ত হয়েছে! 🎉', 'success');
 }
 
-// 🔥 প্রাথমিক ডেটা সেটআপ - প্রতিটি আইটেম আলাদা করে
 function initializeFirebaseData() {
   database.ref('users').once('value').then((snapshot) => {
     if (!snapshot.exists()) {
@@ -192,7 +190,7 @@ function showToast(message, type) {
   const toast = document.createElement('div');
   const colors = { success: 'bg-green-500', error: 'bg-red-500', info: 'bg-blue-500', warning: 'bg-yellow-500' };
   toast.className = colors[type] + ' text-white px-6 py-3 rounded-lg shadow-lg toast-enter flex items-center gap-2 min-w-[250px]';
-  const icons = { success: '✓', error: '✗', info: 'ℹ', warning: '⚠' };
+  const icons = { success: '✓', error: '', info: 'ℹ', warning: '' };
   toast.innerHTML = '<span class="text-xl font-bold">' + icons[type] + '</span><span class="font-medium">' + message + '</span>';
   container.appendChild(toast);
   setTimeout(function() { 
@@ -240,25 +238,44 @@ function getStatusColor(status) {
   return colors[status] || 'bg-gray-100 text-gray-800';
 }
 
-function handleFileUpload(inputId, callback) {
-  var input = document.getElementById(inputId);
-  if (input && input.files && input.files[0]) {
-    var file = input.files[0];
-    if (file.size > 5 * 1024 * 1024) {
-      showToast('ফাইল সাইজ ৫MB এর কম হতে হবে!', 'error');
-      return;
-    }
+// 🔥 ImgBB তে ছবি আপলোড
+function uploadToImgBB(file) {
+  return new Promise(function(resolve, reject) {
     var reader = new FileReader();
-    reader.onload = function(e) { callback(e.target.result); };
+    reader.onload = function(e) {
+      var base64Image = e.target.result.split(',')[1];
+      var formData = new FormData();
+      formData.append('image', base64Image);
+      
+      fetch('https://api.imgbb.com/1/upload?key=' + IMGBB_API_KEY, {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          resolve(data.data.url);
+        } else {
+          reject(new Error('Upload failed'));
+        }
+      })
+      .catch(error => reject(error));
+    };
     reader.readAsDataURL(file);
-  }
+  });
 }
 
-function downloadFile(dataUrl, filename) {
-  if (!dataUrl) { showToast('ডাউনলোড করার মতো কিছু নেই!', 'error'); return; }
+// 🔥 ফাইল ডাউনলোড
+function downloadFile(fileUrl, filename) {
+  if (!fileUrl) {
+    showToast('ডাউনলোড করার মতো কিছু নেই!', 'error');
+    return;
+  }
+  
   var link = document.createElement('a');
-  link.href = dataUrl;
+  link.href = fileUrl;
   link.download = filename || 'download';
+  link.target = '_blank';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -297,7 +314,7 @@ function renderFeatures() {
   const features = [
     { icon: '✨', title: 'ইউনিক প্রোডাক্ট কালেকশন', desc: 'স্বতন্ত্র ও ট্রেন্ডি ইউনিক প্রোডাক্টস সমাহার', color: 'bg-indigo-100 text-indigo-600' },
     { icon: '🚚', title: 'দ্রুত ডেলিভারি', desc: '৬৪টি জেলায় ক্যাশ অন ডেলিভারি', color: 'bg-blue-100 text-blue-600' },
-    { icon: '💰', title: '২/৭ পেমেন্ট', desc: 'যেকোনো সময় পেমেন্ট রিকোয়ারি', color: 'bg-purple-100 text-purple-600' },
+    { icon: '💰', title: '/৭ পেমেন্ট', desc: 'যেকোনো সময় পেমেন্ট রিকোয়ারি', color: 'bg-purple-100 text-purple-600' },
     { icon: '🏷️', title: 'হোয়াইট লেবেল', desc: 'আপনার ব্র্যান্ড নামে ডেলিভারি', color: 'bg-yellow-100 text-yellow-600' },
     { icon: '🎧', title: 'ডেডিকেটেড সাপোর্ট', desc: 'সাপোর্ট টিম সর্বদা প্রস্তুত', color: 'bg-pink-100 text-pink-600' },
     { icon: '📈', title: 'মার্কেটিং ম্যাটেরিয়ালস', desc: 'হাই-কোয়ালিটি ছবি ও ভিডিও', color: 'bg-green-100 text-green-600' }
@@ -315,7 +332,7 @@ function renderHowItWorks() {
   const steps = [
     { num: '১', title: 'সাইন আপ', desc: '২ মিনিটে অ্যাকাউন্ট খুলুন', color: 'text-indigo-600 border-indigo-200' },
     { num: '২', title: 'প্রোডাক্ট বাছাই', desc: 'পছন্দের পণ্য বেছে নিন', color: 'text-blue-600 border-blue-200' },
-    { num: '৩', title: 'অর্ডার প্লেস', desc: 'কাস্টমার অর্ডার করলে প্যানেলে অর্ডার করুন', color: 'text-purple-600 border-purple-200' },
+    { num: '', title: 'অর্ডার প্লেস', desc: 'কাস্টমার অর্ডার করলে প্যানেলে অর্ডার করুন', color: 'text-purple-600 border-purple-200' },
     { num: '৪', title: 'প্রফিট নিন', desc: 'ডেলিভারি শেষে লাভের টাকা পান', color: 'text-amber-600 border-amber-200' }
   ];
   let html = '<section id="how" class="py-16 bg-white"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div class="text-center mb-12"><p class="text-indigo-600 font-semibold mb-2">প্রক্রিয়া</p><h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-3">কিভাবে আয় শুরু করবেন?</h2></div><div class="grid grid-cols-1 md:grid-cols-4 gap-6">';
@@ -332,7 +349,7 @@ function renderProducts() {
   for (var i = 0; i < DEFAULT_DATA.products.length && i < 10; i++) {
     var p = DEFAULT_DATA.products[i];
     if (!p) continue;
-    html += '<div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 card-hover cursor-pointer" onclick="state.currentView=\'login\';renderApp();"><img src="' + (p.image || '') + '" class="w-full h-32 object-cover rounded-lg mb-2"><p class="text-xs font-medium text-gray-900 text-center">' + (p.name || '') + '</p></div>';
+    html += '<div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 card-hover cursor-pointer" onclick="state.currentView=\'login\';renderApp();"><img src="' + (p.image || '') + '" class="w-full h-32 object-cover rounded-lg mb-2" onerror="this.src=\'https://via.placeholder.com/300x200?text=No+Image\'"><p class="text-xs font-medium text-gray-900 text-center">' + (p.name || '') + '</p></div>';
   }
   html += '</div></div></section>';
   return html;
@@ -343,7 +360,7 @@ function renderCTA() {
 }
 
 function renderFooter() {
-  return '<footer class="bg-slate-900 text-white py-12"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8"><div><span class="text-2xl font-black">ONLINEHATDROPSHOP</span><p class="text-gray-400 text-sm mt-2">বাংলাদেশের #1 Dropshipping প্ল্যাটফর্ম</p></div><div><h4 class="font-bold mb-3">লিংকসমূহ</h4><ul class="space-y-2 text-sm text-gray-400"><li>হোম</li><li>আমাদের সম্পর্কে</li></ul></div><div><h4 class="font-bold mb-3">সাপোর্ট</h4><ul class="space-y-2 text-sm text-gray-400"><li>হেল্প সেন্টার</li><li>প্রাইভেসি পলিসি</li></ul></div><div><h4 class="font-bold mb-3">যোগাযোগ</h4><ul class="space-y-2 text-sm text-gray-400"><li>📍 Mymensingh, Bangladesh</li><li>📞 01913821910</li><li>✉️ san212128109@gmail.com</li></ul></div></div><div class="border-t border-gray-800 pt-6 text-center text-sm text-gray-500"><p>© 2026 সর্বস্বত্ব সংরক্ষিত।</p></div></div></footer>';
+  return '<footer class="bg-slate-900 text-white py-12"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8"><div><span class="text-2xl font-black">ONLINEHATDROPSHOP</span><p class="text-gray-400 text-sm mt-2">বাংলাদেশের #1 Dropshipping প্ল্যাটফর্ম</p></div><div><h4 class="font-bold mb-3">লিংকসমূহ</h4><ul class="space-y-2 text-sm text-gray-400"><li>হোম</li><li>আমাদের সম্পর্কে</li></ul></div><div><h4 class="font-bold mb-3">সাপোর্ট</h4><ul class="space-y-2 text-sm text-gray-400"><li>হেল্প সেন্টার</li><li>প্রাইভেসি পলিসি</li></ul></div><div><h4 class="font-bold mb-3">যোগাযোগ</h4><ul class="space-y-2 text-sm text-gray-400"><li>📍 Mymensingh, Bangladesh</li><li> 01913821910</li><li>✉️ san212128109@gmail.com</li></ul></div></div><div class="border-t border-gray-800 pt-6 text-center text-sm text-gray-500"><p>© 2026 সর্বস্বত্ব সংরক্ষিত।</p></div></div></footer>';
 }
 
 function renderLogin() {
@@ -457,15 +474,15 @@ function renderSidebar() {
     { id: 'home', icon: '🏠', label: 'হোম' },
     { id: 'products', icon: '📦', label: 'প্রোডাক্টস' },
     { id: 'cart', icon: '🛒', label: 'কার্ট (' + state.cart.length + ')' },
-    { id: 'orders', icon: '📋', label: 'অর্ডার' },
+    { id: 'orders', icon: '', label: 'অর্ডার' },
     { id: 'wishlist', icon: '❤️', label: 'উইশলিস্ট' },
-    { id: 'wallet', icon: '💰', label: 'ওয়ালেট' },
+    { id: 'wallet', icon: '', label: 'ওয়ালেট' },
     { id: 'profile', icon: '👤', label: 'প্রোফাইল' },
-    { id: 'packages', icon: '🎁', label: 'প্যাকেজ' }
+    { id: 'packages', icon: '', label: 'প্যাকেজ' }
   ];
   if (isAdmin) menuItems.push({ id: 'admin', icon: '⚙️', label: 'অ্যাডমিন প্যানেল' });
   var sidebarClass = state.sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0';
-  var html = '<aside class="sidebar-bg text-white w-64 flex-shrink-0 flex flex-col fixed md:relative inset-y-0 left-0 z-40 transition-transform duration-300 ease-in-out ' + sidebarClass + '"><div class="p-4 border-b border-gray-800 flex justify-between items-center md:justify-start"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center font-bold">' + (u.name ? u.name.charAt(0) : '?') + '</div><div><p class="font-semibold text-sm">' + (u.name || 'User') + '</p><p class="text-xs text-gray-400">' + (u.role || 'Customer') + ' • ' + (u.verified ? '✅ Verified' : '⚠️ Unverified') + '</p></div></div><button type="button" onclick="state.sidebarOpen=false;renderApp();" class="md:hidden text-gray-400 hover:text-white text-xl">✕</button></div><div class="mt-3 bg-gray-800 rounded-lg p-3 flex justify-between items-center mx-4"><div><p class="text-xs text-gray-400">ব্যালেন্স</p><p class="text-xl font-bold text-white">৳' + (u.balance || 0) + '</p></div><span class="text-xs bg-green-600 px-2 py-1 rounded">Active</span></div><nav class="flex-1 p-2 space-y-1 overflow-y-auto">';
+  var html = '<aside class="sidebar-bg text-white w-64 flex-shrink-0 flex flex-col fixed md:relative inset-y-0 left-0 z-40 transition-transform duration-300 ease-in-out ' + sidebarClass + '"><div class="p-4 border-b border-gray-800 flex justify-between items-center md:justify-start"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center font-bold">' + (u.name ? u.name.charAt(0) : '?') + '</div><div><p class="font-semibold text-sm">' + (u.name || 'User') + '</p><p class="text-xs text-gray-400">' + (u.role || 'Customer') + ' • ' + (u.verified ? '✅ Verified' : '⚠️ Unverified') + '</p></div></div><button type="button" onclick="state.sidebarOpen=false;renderApp();" class="md:hidden text-gray-400 hover:text-white text-xl"></button></div><div class="mt-3 bg-gray-800 rounded-lg p-3 flex justify-between items-center mx-4"><div><p class="text-xs text-gray-400">ব্যালেন্স</p><p class="text-xl font-bold text-white">৳' + (u.balance || 0) + '</p></div><span class="text-xs bg-green-600 px-2 py-1 rounded">Active</span></div><nav class="flex-1 p-2 space-y-1 overflow-y-auto">';
   for (var i = 0; i < menuItems.length; i++) {
     var m = menuItems[i];
     var active = state.dashboardView === m.id ? 'active' : '';
@@ -484,7 +501,7 @@ function renderTopbar(unreadNotifs) {
     var userNotifs = DEFAULT_DATA.notifications.filter(function(n) { return n && n.userId === u.id; }).reverse().slice(0, 10);
     notifMenu = '<div class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-100 z-50 notif-dropdown max-h-96 overflow-y-auto"><div class="p-3 border-b border-gray-100 flex justify-between items-center"><h3 class="font-bold text-gray-900">নোটিফিকেশন</h3><button type="button" onclick="markAllRead()" class="text-xs text-indigo-600 hover:underline">সব পড়া</button></div>';
     if (userNotifs.length === 0) {
-      notifMenu += '<div class="p-6 text-center text-gray-500"><p class="text-3xl mb-2">🔔</p><p class="text-sm">কোনো নোটিফিকেশন নেই</p></div>';
+      notifMenu += '<div class="p-6 text-center text-gray-500"><p class="text-3xl mb-2"></p><p class="text-sm">কোনো নোটিফিকেশন নেই</p></div>';
     } else {
       notifMenu += '<div class="divide-y divide-gray-100">';
       for (var i = 0; i < userNotifs.length; i++) {
@@ -497,7 +514,7 @@ function renderTopbar(unreadNotifs) {
     }
     notifMenu += '<div class="p-2 border-t border-gray-100"><button type="button" onclick="state.dashboardView=\'notifications\';state.notifDropdown=false;renderApp();" class="w-full text-center text-sm text-indigo-600 hover:underline font-medium">সব নোটিফিকেশন দেখুন →</button></div></div>';
   }
-  return '<header class="bg-white border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between sticky top-0 z-20"><div class="flex items-center gap-4 flex-1"><button type="button" onclick="state.sidebarOpen=true;renderApp();" class="md:hidden text-gray-600 text-2xl">☰</button><h1 class="text-lg font-bold text-gray-900 hidden md:block">ড্যাশবোর্ড</h1><div class="relative flex-1 max-w-md"><span class="absolute left-3 top-2.5 text-gray-400">🔍</span><input type="text" class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:ring-2 focus:ring-indigo-500" placeholder="প্রোডাক্ট খুঁজুন..."></div></div><div class="flex items-center gap-3"><div class="relative"><button type="button" onclick="state.notifDropdown=!state.notifDropdown;state.userDropdown=false;renderApp();" class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">🔔' + (unreadNotifs > 0 ? '<span class="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">' + unreadNotifs + '</span>' : '') + '</button>' + notifMenu + '</div><div class="relative"><button type="button" onclick="state.userDropdown=!state.userDropdown;state.notifDropdown=false;renderApp();" class="flex items-center gap-2 p-1 hover:bg-gray-100 rounded-lg"><div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">' + (u.name ? u.name.charAt(0) : '?') + '</div><span class="hidden md:block text-sm font-medium text-gray-700">' + (u.name || '') + '</span><span class="text-gray-400 text-xs">▼</span></button>' + userMenu + '</div></div></header>';
+  return '<header class="bg-white border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between sticky top-0 z-20"><div class="flex items-center gap-4 flex-1"><button type="button" onclick="state.sidebarOpen=true;renderApp();" class="md:hidden text-gray-600 text-2xl">☰</button><h1 class="text-lg font-bold text-gray-900 hidden md:block">ড্যাশবোর্ড</h1><div class="relative flex-1 max-w-md"><span class="absolute left-3 top-2.5 text-gray-400">🔍</span><input type="text" class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:ring-2 focus:ring-indigo-500" placeholder="প্রোডাক্ট খুঁজুন..."></div></div><div class="flex items-center gap-3"><div class="relative"><button type="button" onclick="state.notifDropdown=!state.notifDropdown;state.userDropdown=false;renderApp();" class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">' + (unreadNotifs > 0 ? '<span class="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">' + unreadNotifs + '</span>' : '') + '</button>' + notifMenu + '</div><div class="relative"><button type="button" onclick="state.userDropdown=!state.userDropdown;state.notifDropdown=false;renderApp();" class="flex items-center gap-2 p-1 hover:bg-gray-100 rounded-lg"><div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">' + (u.name ? u.name.charAt(0) : '?') + '</div><span class="hidden md:block text-sm font-medium text-gray-700">' + (u.name || '') + '</span><span class="text-gray-400 text-xs">▼</span></button>' + userMenu + '</div></div></header>';
 }
 
 function renderDashboardContent() {
@@ -534,7 +551,7 @@ function renderDashHome() {
     html += '<div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm"><div class="w-10 h-10 ' + s.color + ' rounded-lg flex items-center justify-center text-xl mb-2">' + s.icon + '</div><p class="text-2xl font-bold text-gray-900">' + s.value + '</p><p class="text-xs text-gray-500">' + s.label + '</p></div>';
   }
   html += '</div>';
-  html += '<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"><div class="bg-slate-900 text-white rounded-xl p-5"><p class="text-sm text-gray-400 mb-1">বর্তমান ব্যালেন্স</p><p class="text-3xl font-black">৳' + (u.balance || 0) + '</p><p class="text-xs text-gray-400 mt-2">উত্তোলনযোগ্য</p></div><div class="bg-indigo-600 text-white rounded-xl p-5"><p class="text-sm text-indigo-200 mb-1">মোট প্রফিট</p><p class="text-3xl font-black">৳0</p><p class="text-xs text-indigo-200 mt-2">সর্বমোট আয়</p></div><div class="bg-green-600 text-white rounded-xl p-5"><p class="text-sm text-green-200 mb-1">ক্রেডিট</p><p class="text-3xl font-black">' + (u.credits || 0) + '</p><p class="text-xs text-green-200 mt-2">ব্যবহারযোগ্য</p></div></div>';
+  html += '<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"><div class="bg-slate-900 text-white rounded-xl p-5"><p class="text-sm text-gray-400 mb-1">বর্তমান ব্যালেন্স</p><p class="text-3xl font-black">৳' + (u.balance || 0) + '</p><p class="text-xs text-gray-400 mt-2">উত্তোলনযোগ্য</p></div><div class="bg-indigo-600 text-white rounded-xl p-5"><p class="text-sm text-indigo-200 mb-1">মোট প্রফিট</p><p class="text-3xl font-black">0</p><p class="text-xs text-indigo-200 mt-2">সর্বমোট আয়</p></div><div class="bg-green-600 text-white rounded-xl p-5"><p class="text-sm text-green-200 mb-1">ক্রেডিট</p><p class="text-3xl font-black">' + (u.credits || 0) + '</p><p class="text-xs text-green-200 mt-2">ব্যবহারযোগ্য</p></div></div>';
   html += '<div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm"><div class="flex justify-between items-center mb-4"><h3 class="font-bold text-gray-900">সাম্প্রতিক অর্ডার</h3><button type="button" onclick="state.dashboardView=\'orders\';renderApp();" class="text-indigo-600 text-sm font-medium">সব দেখুন →</button></div>';
   if (userOrders.length === 0) {
     html += '<div class="text-center py-8 text-gray-400"><p class="text-4xl mb-2">📭</p><p>এখানে কোনো অর্ডার নেই</p><button type="button" onclick="state.dashboardView=\'products\';renderApp();" class="text-indigo-600 text-sm mt-2 font-medium">প্রোডাক্ট দেখুন →</button></div>';
@@ -578,9 +595,14 @@ function renderDashProductCard(p) {
   var inWishlist = state.wishlist.indexOf(p.id) !== -1;
   var inCart = state.cart.find(function(c) { return c.id === p.id; });
   var hasVideo = p.video ? true : false;
-  var isBase64Image = p.image && p.image.startsWith('data:');
-  var isBase64Video = p.video && p.video.startsWith('data:');
-  return '<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden card-hover"><div class="relative"><img src="' + (p.image || '') + '" class="w-full h-48 object-cover">' + (discount > 0 ? '<span class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded font-bold">' + discount + '% OFF</span>' : '') + (hasVideo ? '<span class="absolute top-2 right-12 bg-purple-500 text-white text-xs px-2 py-1 rounded font-bold">🎬 ভিডিও</span>' : '') + '<button type="button" onclick="toggleWishlist(' + p.id + ')" class="absolute top-2 right-2 bg-white p-2 rounded-full shadow">' + (inWishlist ? '❤️' : '🤍') + '</button></div><div class="p-4"><p class="text-xs text-gray-500 mb-1">' + (p.category || '') + '</p><h3 class="font-semibold text-gray-900 truncate mb-2">' + (p.name || '') + '</h3><div class="flex items-center gap-2 mb-2"><span class="text-lg font-bold text-indigo-600">৳' + (p.price || 0) + '</span><span class="text-sm text-gray-400 line-through">৳' + (p.originalPrice || 0) + '</span></div><p class="text-xs text-green-600 mb-3">স্টক: ' + (p.stock || 0) + '</p><div class="flex gap-2 mb-2">' + (isBase64Image ? '<button type="button" onclick="downloadFile(\'' + p.image + '\', \'' + (p.name || 'image').replace(/[^a-zA-Z0-9]/g, '_') + '.jpg\')" class="flex-1 text-xs bg-blue-100 text-blue-700 px-2 py-1.5 rounded hover:bg-blue-200 font-medium">📥 ছবি</button>' : '') + (isBase64Video ? '<button type="button" onclick="downloadFile(\'' + p.video + '\', \'' + (p.name || 'video').replace(/[^a-zA-Z0-9]/g, '_') + '.mp4\')" class="flex-1 text-xs bg-purple-100 text-purple-700 px-2 py-1.5 rounded hover:bg-purple-200 font-medium">📥 ভিডিও</button>' : '') + '</div><button type="button" onclick="addToCart(' + p.id + ')" ' + (inCart ? 'disabled' : '') + ' class="w-full py-2 rounded-lg font-medium ' + (inCart ? 'bg-green-100 text-green-700' : 'bg-indigo-600 text-white hover:bg-indigo-700') + '">' + (inCart ? '✓ কার্টে আছে' : 'কার্টে যোগ করুন') + '</button></div></div>';
+  return '<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden card-hover"><div class="relative"><img src="' + (p.image || 'https://via.placeholder.com/300x200?text=No+Image') + '" class="w-full h-48 object-cover" onerror="this.src=\'https://via.placeholder.com/300x200?text=No+Image\'">' + (discount > 0 ? '<span class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded font-bold">' + discount + '% OFF</span>' : '') + (hasVideo ? '<span class="absolute top-2 right-12 bg-purple-500 text-white text-xs px-2 py-1 rounded font-bold">🎬 ভিডিও</span>' : '') + '<button type="button" onclick="toggleWishlist(' + p.id + ')" class="absolute top-2 right-2 bg-white p-2 rounded-full shadow">' + (inWishlist ? '❤️' : '🤍') + '</button></div><div class="p-4"><p class="text-xs text-gray-500 mb-1">' + (p.category || '') + '</p><h3 class="font-semibold text-gray-900 truncate mb-2">' + (p.name || '') + '</h3><div class="flex items-center gap-2 mb-2"><span class="text-lg font-bold text-indigo-600">৳' + (p.price || 0) + '</span><span class="text-sm text-gray-400 line-through">৳' + (p.originalPrice || 0) + '</span></div><p class="text-xs text-green-600 mb-3">স্টক: ' + (p.stock || 0) + '</p><div class="flex gap-2 mb-2">';
+  if (p.image && p.downloadable !== false) {
+    html += '<button type="button" onclick="downloadFile(\'' + p.image + '\', \'' + (p.name || 'image').replace(/[^a-zA-Z0-9]/g, '_') + '.jpg\')" class="flex-1 text-xs bg-blue-100 text-blue-700 px-2 py-1.5 rounded hover:bg-blue-200 font-medium">📥 ছবি</button>';
+  }
+  if (p.video && p.downloadable !== false) {
+    html += '<button type="button" onclick="downloadFile(\'' + p.video + '\', \'' + (p.name || 'video').replace(/[^a-zA-Z0-9]/g, '_') + '.mp4\')" class="flex-1 text-xs bg-purple-100 text-purple-700 px-2 py-1.5 rounded hover:bg-purple-200 font-medium">📥 ভিডিও</button>';
+  }
+  html += '</div><button type="button" onclick="addToCart(' + p.id + ')" ' + (inCart ? 'disabled' : '') + ' class="w-full py-2 rounded-lg font-medium ' + (inCart ? 'bg-green-100 text-green-700' : 'bg-indigo-600 text-white hover:bg-indigo-700') + '">' + (inCart ? '✓ কার্টে আছে' : 'কার্টে যোগ করুন') + '</button></div></div>';
 }
 
 function renderDashCart() {
@@ -635,7 +657,7 @@ function renderDashWallet() {
     }
     txHtml += '</div>';
   }
-  return '<div class="fade-in"><h2 class="text-2xl font-bold mb-6 text-gray-900">ওয়ালেট</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"><div class="bg-indigo-600 text-white rounded-xl p-5"><p class="text-sm text-indigo-200 mb-1">বর্তমান ব্যালেন্স</p><p class="text-3xl font-black">৳' + (u.balance || 0) + '</p></div><div class="bg-green-600 text-white rounded-xl p-5"><p class="text-sm text-green-200 mb-1">মোট আয়</p><p class="text-3xl font-black">৳0</p></div><div class="bg-purple-600 text-white rounded-xl p-5"><p class="text-sm text-purple-200 mb-1">লেনদেন</p><p class="text-3xl font-black">' + transactions.length + '</p></div></div><div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-6"><h3 class="font-bold text-lg mb-4 text-gray-900">উইথড্র রিকোয়েস্ট</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><select id="withdraw-method" class="px-4 py-3 border border-gray-300 rounded-lg text-gray-900"><option value="bKash">bKash</option><option value="Nagad">Nagad</option><option value="Rocket">Rocket</option><option value="Bank">Bank</option></select><input type="number" id="withdraw-amount" class="px-4 py-3 border border-gray-300 rounded-lg text-gray-900" placeholder="পরিমাণ"><input type="text" id="withdraw-account" class="px-4 py-3 border border-gray-300 rounded-lg md:col-span-2 text-gray-900" placeholder="অ্যাকাউন্ট নম্বর"><button type="button" onclick="requestWithdraw()" class="bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 md:col-span-2">উইথড্র রিকোয়েস্ট</button></div></div><div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100"><h3 class="font-bold text-lg mb-4 text-gray-900">লেনদেন হিস্ট্রি</h3>' + txHtml + '</div></div>';
+  return '<div class="fade-in"><h2 class="text-2xl font-bold mb-6 text-gray-900">ওয়ালেট</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"><div class="bg-indigo-600 text-white rounded-xl p-5"><p class="text-sm text-indigo-200 mb-1">বর্তমান ব্যালেন্স</p><p class="text-3xl font-black">৳' + (u.balance || 0) + '</p></div><div class="bg-green-600 text-white rounded-xl p-5"><p class="text-sm text-green-200 mb-1">মোট আয়</p><p class="text-3xl font-black">0</p></div><div class="bg-purple-600 text-white rounded-xl p-5"><p class="text-sm text-purple-200 mb-1">লেনদেন</p><p class="text-3xl font-black">' + transactions.length + '</p></div></div><div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-6"><h3 class="font-bold text-lg mb-4 text-gray-900">উইথড্র রিকোয়েস্ট</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><select id="withdraw-method" class="px-4 py-3 border border-gray-300 rounded-lg text-gray-900"><option value="bKash">bKash</option><option value="Nagad">Nagad</option><option value="Rocket">Rocket</option><option value="Bank">Bank</option></select><input type="number" id="withdraw-amount" class="px-4 py-3 border border-gray-300 rounded-lg text-gray-900" placeholder="পরিমাণ"><input type="text" id="withdraw-account" class="px-4 py-3 border border-gray-300 rounded-lg md:col-span-2 text-gray-900" placeholder="অ্যাকাউন্ট নম্বর"><button type="button" onclick="requestWithdraw()" class="bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 md:col-span-2">উইথড্র রিকোয়েস্ট</button></div></div><div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100"><h3 class="font-bold text-lg mb-4 text-gray-900">লেনদেন হিস্ট্রি</h3>' + txHtml + '</div></div>';
 }
 
 function renderDashProfile() {
@@ -664,7 +686,7 @@ function renderPackages() {
 function buyPackage(id) {
   var pkg = DEFAULT_DATA.packages.find(function(p) { return p && p.id === id; });
   if (!pkg) return;
-  showModal('<div class="p-6"><h2 class="text-2xl font-bold mb-4 text-gray-900">' + (pkg.name || '') + ' কিনুন</h2><div class="bg-indigo-50 rounded-lg p-4 mb-4"><p class="font-bold text-gray-900">মূল্য: ৳' + (pkg.price || 0) + '</p><p class="text-sm text-gray-600">' + (pkg.duration || '') + '</p></div><div class="space-y-3 mb-4"><label class="block text-sm font-medium text-gray-700">পেমেন্ট মেথড</label><select id="pkg-payment" class="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900"><option value="bKash">bKash</option><option value="Nagad">Nagad</option><option value="Rocket">Rocket</option></select><label class="block text-sm font-medium text-gray-700">ট্রানজেকশন ID</label><input type="text" id="pkg-txn" class="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900" placeholder="Transaction ID"></div><div class="flex gap-2"><button type="button" onclick="closeModal()" class="flex-1 bg-gray-200 text-gray-800 py-3 rounded-lg font-medium">বাতিল</button><button type="button" onclick="confirmPackage(' + id + ')" class="flex-1 bg-indigo-600 text-white py-3 rounded-lg font-semibold">কনফার্ম</button></div></div>');
+  showModal('<div class="p-6"><h2 class="text-2xl font-bold mb-4 text-gray-900">' + (pkg.name || '') + ' কিনুন</h2><div class="bg-indigo-50 rounded-lg p-4 mb-4"><p class="font-bold text-gray-900">মূল্য: ' + (pkg.price || 0) + '</p><p class="text-sm text-gray-600">' + (pkg.duration || '') + '</p></div><div class="space-y-3 mb-4"><label class="block text-sm font-medium text-gray-700">পেমেন্ট মেথড</label><select id="pkg-payment" class="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900"><option value="bKash">bKash</option><option value="Nagad">Nagad</option><option value="Rocket">Rocket</option></select><label class="block text-sm font-medium text-gray-700">ট্রানজেকশন ID</label><input type="text" id="pkg-txn" class="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900" placeholder="Transaction ID"></div><div class="flex gap-2"><button type="button" onclick="closeModal()" class="flex-1 bg-gray-200 text-gray-800 py-3 rounded-lg font-medium">বাতিল</button><button type="button" onclick="confirmPackage(' + id + ')" class="flex-1 bg-indigo-600 text-white py-3 rounded-lg font-semibold">কনফার্ম</button></div></div>');
 }
 
 function confirmPackage(id) {
@@ -694,7 +716,7 @@ function renderAdminPanel() {
   var totalProducts = DEFAULT_DATA.products.filter(x => x).length;
   var totalWithdrawals = DEFAULT_DATA.withdrawals.filter(x => x).length;
   var html = '<div class="fade-in"><h2 class="text-2xl font-bold mb-6 text-gray-900">অ্যাডমিন প্যানেল ⚙️</h2><div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6"><div class="bg-blue-500 text-white rounded-xl p-4"><p class="text-sm opacity-90">মোট ইউজার</p><p class="text-2xl font-bold">' + totalUsers + '</p></div><div class="bg-green-500 text-white rounded-xl p-4"><p class="text-sm opacity-90">ভেরিফাইড</p><p class="text-2xl font-bold">' + verifiedUsers + '</p></div><div class="bg-purple-500 text-white rounded-xl p-4"><p class="text-sm opacity-90">মোট অর্ডার</p><p class="text-2xl font-bold">' + totalOrders + '</p></div><div class="bg-indigo-500 text-white rounded-xl p-4"><p class="text-sm opacity-90">মোট প্রোডাক্ট</p><p class="text-2xl font-bold">' + totalProducts + '</p></div><div class="bg-amber-500 text-white rounded-xl p-4"><p class="text-sm opacity-90">উইথড্র রিকোয়েস্ট</p><p class="text-2xl font-bold">' + totalWithdrawals + '</p></div></div>';
-  html += '<div class="flex gap-2 mb-4 border-b border-gray-200 pb-2 overflow-x-auto"><button type="button" onclick="showAdminTab(\'users\')" id="tab-users" class="px-4 py-2 rounded-t-lg font-medium bg-indigo-600 text-white whitespace-nowrap">👥 ইউজার</button><button type="button" onclick="showAdminTab(\'products\')" id="tab-products" class="px-4 py-2 rounded-t-lg font-medium bg-gray-200 text-gray-700 whitespace-nowrap">📦 প্রোডাক্ট</button><button type="button" onclick="showAdminTab(\'orders\')" id="tab-orders" class="px-4 py-2 rounded-t-lg font-medium bg-gray-200 text-gray-700 whitespace-nowrap">📋 অর্ডার (🔴Live)</button><button type="button" onclick="showAdminTab(\'withdrawals\')" id="tab-withdrawals" class="px-4 py-2 rounded-t-lg font-medium bg-gray-200 text-gray-700 whitespace-nowrap">💸 উইথড্র</button><button type="button" onclick="showAdminTab(\'broadcast\')" id="tab-broadcast" class="px-4 py-2 rounded-t-lg font-medium bg-gray-200 text-gray-700 whitespace-nowrap">📢 নোটিফিকেশন</button></div>';
+  html += '<div class="flex gap-2 mb-4 border-b border-gray-200 pb-2 overflow-x-auto"><button type="button" onclick="showAdminTab(\'users\')" id="tab-users" class="px-4 py-2 rounded-t-lg font-medium bg-indigo-600 text-white whitespace-nowrap">👥 ইউজার</button><button type="button" onclick="showAdminTab(\'products\')" id="tab-products" class="px-4 py-2 rounded-t-lg font-medium bg-gray-200 text-gray-700 whitespace-nowrap">📦 প্রোডাক্ট</button><button type="button" onclick="showAdminTab(\'orders\')" id="tab-orders" class="px-4 py-2 rounded-t-lg font-medium bg-gray-200 text-gray-700 whitespace-nowrap">📋 অর্ডার (Live)</button><button type="button" onclick="showAdminTab(\'withdrawals\')" id="tab-withdrawals" class="px-4 py-2 rounded-t-lg font-medium bg-gray-200 text-gray-700 whitespace-nowrap">💸 উইথড্র</button><button type="button" onclick="showAdminTab(\'broadcast\')" id="tab-broadcast" class="px-4 py-2 rounded-t-lg font-medium bg-gray-200 text-gray-700 whitespace-nowrap"> নোটিফিকেশন</button></div>';
   html += '<div id="admin-tab-users" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-6"><div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-gray-900">ইউজার লিস্ট</h3><input type="text" id="admin-user-search" oninput="filterAdminUsers()" class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-900" placeholder="ইউজার সার্চ..."></div><div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-gray-50"><tr><th class="p-2 text-left text-gray-700">ইউজার</th><th class="p-2 text-left text-gray-700">রোল</th><th class="p-2 text-left text-gray-700">ব্যালেন্স</th><th class="p-2 text-left text-gray-700">স্ট্যাটাস</th><th class="p-2 text-left text-gray-700">অ্যাকশন</th></tr></thead><tbody id="admin-users-body">';
   for (var i = 0; i < DEFAULT_DATA.users.length; i++) {
     var usr = DEFAULT_DATA.users[i];
@@ -707,7 +729,7 @@ function renderAdminPanel() {
     var prod = DEFAULT_DATA.products[j];
     if (!prod) continue;
     var hasVideo = prod.video ? '🎬' : '';
-    html += '<div class="bg-gray-50 rounded-xl overflow-hidden border border-gray-200"><img src="' + (prod.image || '') + '" class="w-full h-32 object-cover"><div class="p-3"><p class="font-semibold text-sm text-gray-900 truncate">' + (prod.name || '') + ' ' + hasVideo + '</p><p class="text-xs text-gray-500">' + (prod.category || '') + ' • স্টক: ' + (prod.stock || 0) + '</p><p class="text-sm font-bold text-indigo-600 mt-1">৳' + (prod.price || 0) + '</p><div class="flex gap-1 mt-2"><button type="button" onclick="editProduct(' + prod.id + ')" class="flex-1 text-xs bg-indigo-100 text-indigo-800 px-2 py-1 rounded hover:bg-indigo-200">✏️</button><button type="button" onclick="deleteProduct(' + prod.id + ')" class="flex-1 text-xs bg-red-100 text-red-800 px-2 py-1 rounded hover:bg-red-200">🗑️</button></div></div></div>';
+    html += '<div class="bg-gray-50 rounded-xl overflow-hidden border border-gray-200"><img src="' + (prod.image || 'https://via.placeholder.com/300x200?text=No+Image') + '" class="w-full h-32 object-cover" onerror="this.src=\'https://via.placeholder.com/300x200?text=No+Image\'"><div class="p-3"><p class="font-semibold text-sm text-gray-900 truncate">' + (prod.name || '') + ' ' + hasVideo + '</p><p class="text-xs text-gray-500">' + (prod.category || '') + ' • স্টক: ' + (prod.stock || 0) + '</p><p class="text-sm font-bold text-indigo-600 mt-1">৳' + (prod.price || 0) + '</p><div class="flex gap-1 mt-2"><button type="button" onclick="editProduct(' + prod.id + ')" class="flex-1 text-xs bg-indigo-100 text-indigo-800 px-2 py-1 rounded hover:bg-indigo-200">✏️</button><button type="button" onclick="deleteProduct(' + prod.id + ')" class="flex-1 text-xs bg-red-100 text-red-800 px-2 py-1 rounded hover:bg-red-200">🗑️</button></div></div></div>';
   }
   html += '</div></div>';
   html += '<div id="admin-tab-orders" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-6 hidden"><h3 class="font-bold text-lg mb-4 text-gray-900">সকল অর্ডার (🔴 Live)</h3><div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-gray-50"><tr><th class="p-2 text-left text-gray-700">অর্ডার আইডি</th><th class="p-2 text-left text-gray-700">কাস্টমার</th><th class="p-2 text-left text-gray-700">তারিখ</th><th class="p-2 text-left text-gray-700">মোট</th><th class="p-2 text-left text-gray-700">স্ট্যাটাস</th><th class="p-2 text-left text-gray-700">অ্যাকশন</th></tr></thead><tbody id="admin-orders-body">';
@@ -740,7 +762,7 @@ function renderAdminPanel() {
     }
   }
   html += '</tbody></table></div></div>';
-  html += '<div id="admin-tab-broadcast" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hidden"><h3 class="font-bold text-lg mb-4 text-gray-900">📢 নোটিফিকেশন পাঠান</h3><div class="space-y-3"><div><label class="block text-sm font-medium text-gray-700 mb-1">কাকে পাঠাবেন?</label><select id="broadcast-target" class="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900"><option value="all">সব ইউজার</option>';
+  html += '<div id="admin-tab-broadcast" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hidden"><h3 class="font-bold text-lg mb-4 text-gray-900"> নোটিফিকেশন পাঠান</h3><div class="space-y-3"><div><label class="block text-sm font-medium text-gray-700 mb-1">কাকে পাঠাবেন?</label><select id="broadcast-target" class="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900"><option value="all">সব ইউজার</option>';
   for (var k = 0; k < DEFAULT_DATA.users.length; k++) {
     var usr2 = DEFAULT_DATA.users[k];
     if (usr2 && usr2.id !== u.id) {
@@ -857,81 +879,107 @@ function sendSingleNotif(userId) {
 }
 
 function showAddProductForm() {
-  showModal('<div class="p-6"><h2 class="text-2xl font-bold mb-4 text-gray-900">নতুন প্রোডাক্ট যোগ করুন</h2><div class="space-y-3"><div><label class="block text-sm font-medium text-gray-700 mb-1">প্রোডাক্ট নাম</label><input type="text" id="np-name" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900" placeholder="প্রোডাক্টের নাম"></div><div class="grid grid-cols-2 gap-3"><div><label class="block text-sm font-medium text-gray-700 mb-1">ক্যাটাগরি</label><select id="np-category" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900"><option>T-shirt</option><option>Shirt</option><option>Pants</option><option>Electronics</option><option>Watch</option><option>Fashion</option><option>Home Decor</option><option>Clothing</option></select></div><div><label class="block text-sm font-medium text-gray-700 mb-1">স্টক</label><input type="number" id="np-stock" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900" placeholder="0" value="0"></div><div><label class="block text-sm font-medium text-gray-700 mb-1">বিক্রয় মূল্য</label><input type="number" id="np-price" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900" placeholder="0"></div><div><label class="block text-sm font-medium text-gray-700 mb-1">আসল মূল্য</label><input type="number" id="np-original" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900" placeholder="0"></div></div><div><label class="block text-sm font-medium text-gray-700 mb-1">ছবি আপলোড</label><input type="file" id="np-image-file" accept="image/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm"><p class="text-xs text-gray-500 mt-1">অথবা URL দিন:</p><input type="text" id="np-image" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm" placeholder="https://..."></div><div><label class="block text-sm font-medium text-gray-700 mb-1">ভিডিও আপলোড (ঐচ্ছিক)</label><input type="file" id="np-video-file" accept="video/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm"><p class="text-xs text-gray-500 mt-1">অথবা URL দিন:</p><input type="text" id="np-video" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm" placeholder="ভিডিও URL"></div><div><label class="block text-sm font-medium text-gray-700 mb-1">বিবরণ</label><textarea id="np-desc" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900" rows="2" placeholder="প্রোডাক্টের বিবরণ"></textarea></div><div class="flex items-center gap-2"><input type="checkbox" id="np-downloadable" checked class="rounded"><label class="text-sm text-gray-700">সবাই ডাউনলোড করতে পারবে</label></div></div><div class="flex gap-2 mt-4"><button type="button" onclick="closeModal()" class="flex-1 bg-gray-200 text-gray-800 py-3 rounded-lg font-medium">বাতিল</button><button type="button" onclick="saveNewProduct()" class="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold">সেভ করুন</button></div></div>');
+  showModal('<div class="p-6"><h2 class="text-2xl font-bold mb-4 text-gray-900">নতুন প্রোডাক্ট যোগ করুন</h2><div class="space-y-3"><div><label class="block text-sm font-medium text-gray-700 mb-1">প্রোডাক্ট নাম</label><input type="text" id="np-name" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900" placeholder="প্রোডাক্টের নাম"></div><div class="grid grid-cols-2 gap-3"><div><label class="block text-sm font-medium text-gray-700 mb-1">ক্যাটাগরি</label><select id="np-category" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900"><option>T-shirt</option><option>Shirt</option><option>Pants</option><option>Electronics</option><option>Watch</option><option>Fashion</option><option>Home Decor</option><option>Clothing</option></select></div><div><label class="block text-sm font-medium text-gray-700 mb-1">স্টক</label><input type="number" id="np-stock" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900" placeholder="0" value="0"></div><div><label class="block text-sm font-medium text-gray-700 mb-1">বিক্রয় মূল্য</label><input type="number" id="np-price" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900" placeholder="0"></div><div><label class="block text-sm font-medium text-gray-700 mb-1">আসল মূল্য</label><input type="number" id="np-original" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900" placeholder="0"></div></div><div><label class="block text-sm font-medium text-gray-700 mb-1">ছবি আপলোড (গ্যালারি থেকে) </label><input type="file" id="np-image-file" accept="image/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm"><p class="text-xs text-gray-500 mt-1">অথবা URL দিন:</p><input type="text" id="np-image" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm" placeholder="https://..."></div><div><label class="block text-sm font-medium text-gray-700 mb-1">ভিডিও আপলোড (গ্যালারি থেকে) 🎬</label><input type="file" id="np-video-file" accept="video/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm"><p class="text-xs text-gray-500 mt-1">অথবা URL দিন:</p><input type="text" id="np-video" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm" placeholder="ভিডিও URL"></div><div><label class="block text-sm font-medium text-gray-700 mb-1">বিবরণ</label><textarea id="np-desc" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900" rows="2" placeholder="প্রোডাক্টের বিবরণ"></textarea></div><div class="flex items-center gap-2"><input type="checkbox" id="np-downloadable" checked class="rounded"><label class="text-sm text-gray-700">ইউজাররা ডাউনলোড করতে পারবে</label></div></div><div class="flex gap-2 mt-4"><button type="button" onclick="closeModal()" class="flex-1 bg-gray-200 text-gray-800 py-3 rounded-lg font-medium">বাতিল</button><button type="button" onclick="saveNewProduct()" class="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold">সেভ করুন</button></div></div>');
 }
 
-function saveNewProduct() {
+async function saveNewProduct() {
   var name = document.getElementById('np-name').value.trim();
   var category = document.getElementById('np-category').value;
   var stock = parseInt(document.getElementById('np-stock').value) || 0;
   var price = parseFloat(document.getElementById('np-price').value) || 0;
   var originalPrice = parseFloat(document.getElementById('np-original').value) || 0;
-  var image = document.getElementById('np-image').value.trim();
-  var video = document.getElementById('np-video').value.trim();
   var description = document.getElementById('np-desc').value.trim();
   var downloadable = document.getElementById('np-downloadable').checked;
+  
   if (!name || !price || !originalPrice) { showToast('নাম ও মূল্য দিন!', 'error'); return; }
-  if (!image) image = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop';
+  
+  showToast('আপলোড হচ্ছে... অপেক্ষা করুন', 'info');
+  
   var newProduct = {
     id: Date.now(),
-    name: name, category: category, price: price,
-    originalPrice: originalPrice, stock: stock,
-    image: image, video: video, rating: 4.0, reviews: [],
+    name: name,
+    category: category,
+    price: price,
+    originalPrice: originalPrice,
+    stock: stock,
+    image: 'https://via.placeholder.com/300x200?text=No+Image',
+    video: '',
+    rating: 4.0,
+    reviews: [],
     description: description || name,
     downloadable: downloadable
   };
-  database.ref('products/' + newProduct.id).set(newProduct);
-  notifyAllUsers('🎉 নতুন প্রোডাক্ট যোগ হয়েছে: ' + name + ' - ৳' + price, 'success');
-  closeModal();
-  showToast('প্রোডাক্ট সফলভাবে যোগ হয়েছে!', 'success');
-  renderApp();
+  
+  try {
+    // ছবি আপলোড - ImgBB তে
+    var imageFile = document.getElementById('np-image-file');
+    if (imageFile && imageFile.files && imageFile.files[0]) {
+      var imageUrl = await uploadToImgBB(imageFile.files[0]);
+      newProduct.image = imageUrl;
+    } else {
+      var imageUrl = document.getElementById('np-image').value.trim();
+      if (imageUrl) newProduct.image = imageUrl;
+    }
+    
+    // ভিডিও আপলোড - ImgBB তে
+    var videoFile = document.getElementById('np-video-file');
+    if (videoFile && videoFile.files && videoFile.files[0]) {
+      var videoUrl = await uploadToImgBB(videoFile.files[0]);
+      newProduct.video = videoUrl;
+    } else {
+      var videoUrl = document.getElementById('np-video').value.trim();
+      if (videoUrl) newProduct.video = videoUrl;
+    }
+    
+    // Firebase Database এ সেভ
+    await database.ref('products/' + newProduct.id).set(newProduct);
+    
+    notifyAllUsers('🎉 নতুন প্রোডাক্ট যোগ হয়েছে: ' + name + ' - ৳' + price, 'success');
+    closeModal();
+    showToast('প্রোডাক্ট সফলভাবে যোগ হয়েছে!', 'success');
+    renderApp();
+  } catch (error) {
+    console.error('Error:', error);
+    showToast('এরর: ' + error.message, 'error');
+  }
 }
 
 function editProduct(id) {
   var p = DEFAULT_DATA.products.find(function(x) { return x && x.id === id; });
   if (!p) return;
-  var isBase64Image = p.image && p.image.startsWith('data:');
-  var isBase64Video = p.video && p.video.startsWith('data:');
-  showModal('<div class="p-6"><h2 class="text-2xl font-bold mb-4 text-gray-900">প্রোডাক্ট এডিট</h2><div class="space-y-3"><div><label class="block text-sm font-medium text-gray-700 mb-1">প্রোডাক্ট নাম</label><input type="text" id="ep-name" value="' + (p.name || '') + '" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900"></div><div class="grid grid-cols-2 gap-3"><div><label class="block text-sm font-medium text-gray-700 mb-1">ক্যাটাগরি</label><select id="ep-category" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900"><option ' + (p.category==='T-shirt'?'selected':'') + '>T-shirt</option><option ' + (p.category==='Shirt'?'selected':'') + '>Shirt</option><option ' + (p.category==='Pants'?'selected':'') + '>Pants</option><option ' + (p.category==='Electronics'?'selected':'') + '>Electronics</option><option ' + (p.category==='Watch'?'selected':'') + '>Watch</option><option ' + (p.category==='Fashion'?'selected':'') + '>Fashion</option><option ' + (p.category==='Home Decor'?'selected':'') + '>Home Decor</option><option ' + (p.category==='Clothing'?'selected':'') + '>Clothing</option></select></div><div><label class="block text-sm font-medium text-gray-700 mb-1">স্টক</label><input type="number" id="ep-stock" value="' + (p.stock || 0) + '" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900"></div><div><label class="block text-sm font-medium text-gray-700 mb-1">বিক্রয় মূল্য</label><input type="number" id="ep-price" value="' + (p.price || 0) + '" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900"></div><div><label class="block text-sm font-medium text-gray-700 mb-1">আসল মূল্য</label><input type="number" id="ep-original" value="' + (p.originalPrice || 0) + '" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900"></div></div><div><label class="block text-sm font-medium text-gray-700 mb-1">ছবি আপলোড</label><input type="file" id="ep-image-file" accept="image/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm"><p class="text-xs text-gray-500 mt-1">অথবা URL:</p><input type="text" id="ep-image" value="' + (isBase64Image ? '' : (p.image || '')) + '" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm" placeholder="https://..."></div><div><label class="block text-sm font-medium text-gray-700 mb-1">ভিডিও আপলোড</label><input type="file" id="ep-video-file" accept="video/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm"><p class="text-xs text-gray-500 mt-1">অথবা URL:</p><input type="text" id="ep-video" value="' + (isBase64Video ? '' : (p.video || '')) + '" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm" placeholder="ভিডিও URL"></div><div><label class="block text-sm font-medium text-gray-700 mb-1">বিবরণ</label><textarea id="ep-desc" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900" rows="2">' + (p.description || '') + '</textarea></div></div><div class="flex gap-2 mt-4"><button type="button" onclick="closeModal()" class="flex-1 bg-gray-200 text-gray-800 py-3 rounded-lg font-medium">বাতিল</button><button type="button" onclick="saveProductEdit(' + id + ')" class="flex-1 bg-indigo-600 text-white py-3 rounded-lg font-semibold">আপডেট</button></div></div>');
+  showModal('<div class="p-6"><h2 class="text-2xl font-bold mb-4 text-gray-900">প্রোডাক্ট এডিট</h2><div class="space-y-3"><div><label class="block text-sm font-medium text-gray-700 mb-1">প্রোডাক্ট নাম</label><input type="text" id="ep-name" value="' + (p.name || '') + '" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900"></div><div class="grid grid-cols-2 gap-3"><div><label class="block text-sm font-medium text-gray-700 mb-1">স্টক</label><input type="number" id="ep-stock" value="' + (p.stock || 0) + '" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900"></div><div><label class="block text-sm font-medium text-gray-700 mb-1">মূল্য</label><input type="number" id="ep-price" value="' + (p.price || 0) + '" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900"></div></div><div><label class="block text-sm font-medium text-gray-700 mb-1">নতুন ছবি আপলোড</label><input type="file" id="ep-image-file" accept="image/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm"></div><div><label class="block text-sm font-medium text-gray-700 mb-1">নতুন ভিডিও আপলোড</label><input type="file" id="ep-video-file" accept="video/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 text-sm"></div></div><div class="flex gap-2 mt-4"><button type="button" onclick="closeModal()" class="flex-1 bg-gray-200 text-gray-800 py-3 rounded-lg font-medium">বাতিল</button><button type="button" onclick="saveProductEdit(' + id + ')" class="flex-1 bg-indigo-600 text-white py-3 rounded-lg font-semibold">আপডেট</button></div></div>');
 }
 
-function saveProductEdit(id) {
+async function saveProductEdit(id) {
   var p = DEFAULT_DATA.products.find(function(x) { return x && x.id === id; });
   if (!p) return;
+  
   p.name = document.getElementById('ep-name').value.trim();
-  p.category = document.getElementById('ep-category').value;
   p.stock = parseInt(document.getElementById('ep-stock').value) || 0;
   p.price = parseFloat(document.getElementById('ep-price').value) || 0;
-  p.originalPrice = parseFloat(document.getElementById('ep-original').value) || 0;
-  p.description = document.getElementById('ep-desc').value.trim();
-  var imageFile = document.getElementById('ep-image-file');
-  if (imageFile && imageFile.files && imageFile.files[0]) {
-    handleFileUpload('ep-image-file', function(dataUrl) {
-      p.image = dataUrl;
-      finishProductEdit(id, p);
-    });
-  } else {
-    var imageUrl = document.getElementById('ep-image').value.trim();
-    if (imageUrl) p.image = imageUrl;
+  
+  showToast('আপডেট হচ্ছে...', 'info');
+  
+  try {
+    var imageFile = document.getElementById('ep-image-file');
+    if (imageFile && imageFile.files && imageFile.files[0]) {
+      var imageUrl = await uploadToImgBB(imageFile.files[0]);
+      p.image = imageUrl;
+    }
+    
     var videoFile = document.getElementById('ep-video-file');
     if (videoFile && videoFile.files && videoFile.files[0]) {
-      handleFileUpload('ep-video-file', function(dataUrl) {
-        p.video = dataUrl;
-        finishProductEdit(id, p);
-      });
-    } else {
-      var videoUrl = document.getElementById('ep-video').value.trim();
+      var videoUrl = await uploadToImgBB(videoFile.files[0]);
       p.video = videoUrl;
-      finishProductEdit(id, p);
     }
+    
+    await database.ref('products/' + id).set(p);
+    closeModal();
+    showToast('প্রোডাক্ট আপডেট হয়েছে!', 'success');
+    renderApp();
+  } catch (error) {
+    showToast('এরর: ' + error.message, 'error');
   }
-}
-
-function finishProductEdit(id, p) {
-  database.ref('products/' + id).set(p);
-  closeModal();
-  showToast('প্রোডাক্ট আপডেট হয়েছে!', 'success');
-  renderApp();
 }
 
 function deleteProduct(id) {
