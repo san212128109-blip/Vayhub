@@ -101,7 +101,7 @@ function setupRealtimeListeners() {
   database.ref('withdrawals').on('value', (snapshot) => { const data = snapshot.val(); DEFAULT_DATA.withdrawals = data ? Object.values(data) : []; });
   database.ref('transactions').on('value', (snapshot) => { const data = snapshot.val(); DEFAULT_DATA.transactions = data ? Object.values(data) : []; });
   database.ref('subscriptions').on('value', (snapshot) => { const data = snapshot.val(); DEFAULT_DATA.subscriptions = data ? Object.values(data) : []; if (state.currentView === 'dashboard') renderApp(); });
-  showToast('Firebase সংযুক্ত হয়েছে!', 'success');
+  showToast('Wlecome onlinehatdropshop', 'success');
 }
 
 function initializeFirebaseData() {
