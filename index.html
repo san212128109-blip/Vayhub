@@ -26,6 +26,91 @@ a { text-decoration: none; color: inherit; }
 button { cursor: pointer; border: none; font-family: inherit; }
 img { max-width: 100%; display: block; }
 
+/* WhatsApp Floating Button */
+.whatsapp-float {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 60px;
+  height: 60px;
+  background: #25D366;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+  z-index: 9999;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  animation: whatsappPulse 2s infinite;
+}
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+}
+.whatsapp-float::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #25D366;
+  z-index: -1;
+  animation: whatsappRipple 2s infinite;
+}
+@keyframes whatsappPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+@keyframes whatsappRipple {
+  0% { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+.whatsapp-tooltip {
+  position: absolute;
+  right: 70px;
+  background: white;
+  color: var(--dark);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s;
+  pointer-events: none;
+}
+.whatsapp-tooltip::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-left-color: white;
+}
+.whatsapp-float:hover .whatsapp-tooltip {
+  opacity: 1;
+  visibility: visible;
+  right: 75px;
+}
+@media (max-width: 480px) {
+  .whatsapp-float {
+    width: 54px;
+    height: 54px;
+    font-size: 28px;
+    bottom: 20px;
+    right: 20px;
+  }
+  .whatsapp-tooltip {
+    display: none;
+  }
+}
+
 .top-bar { background: var(--gold); color: var(--dark); padding: 8px 15px; text-align: center; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; overflow: hidden; }
 .top-bar-content { display: flex; justify-content: center; gap: 30px; animation: marquee 25s linear infinite; white-space: nowrap; }
 @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
@@ -46,9 +131,7 @@ img { max-width: 100%; display: block; }
 .icon-btn .badge { position: absolute; top: -2px; right: -2px; background: var(--gold); color: var(--dark); font-size: 9px; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
 .mobile-menu-btn { display: none; background: none; color: var(--white); font-size: 22px; }
 
-/* ============ NEW ACCOUNT SYSTEM ============ */
 .account-wrapper { position: relative; }
-
 .account-trigger {
   display: flex;
   align-items: center;
@@ -74,7 +157,6 @@ img { max-width: 100%; display: block; }
 .account-trigger:hover { background: rgba(255,255,255,0.12); border-color: var(--gold); transform: translateY(-1px); }
 .account-trigger:hover::before { opacity: 1; }
 .account-trigger.open { border-color: var(--gold); background: rgba(201,169,110,0.15); }
-
 .account-avatar {
   width: 32px; height: 32px;
   border-radius: 50%;
@@ -91,7 +173,6 @@ img { max-width: 100%; display: block; }
   background: linear-gradient(135deg, #636e72, #b2bec3);
   color: var(--white);
 }
-
 .account-text {
   display: flex;
   flex-direction: column;
@@ -113,7 +194,6 @@ img { max-width: 100%; display: block; }
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 .account-chevron {
   font-size: 10px;
   color: var(--gold);
@@ -123,7 +203,6 @@ img { max-width: 100%; display: block; }
 }
 .account-trigger.open .account-chevron { transform: rotate(180deg); }
 
-/* Dropdown */
 .account-dropdown {
   position: absolute;
   top: calc(100% + 12px);
@@ -150,7 +229,6 @@ img { max-width: 100%; display: block; }
   transform: rotate(45deg);
   box-shadow: -2px -2px 4px rgba(0,0,0,0.03);
 }
-
 .dropdown-header {
   padding: 20px;
   background: linear-gradient(135deg, #1a1a2e 0%, #2d2d4e 100%);
@@ -206,7 +284,6 @@ img { max-width: 100%; display: block; }
   letter-spacing: 0.5px;
 }
 .dropdown-role-badge.customer { background: rgba(255,255,255,0.15); color: var(--white); }
-
 .dropdown-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -225,9 +302,7 @@ img { max-width: 100%; display: block; }
 }
 .dropdown-stat .stat-num { font-size: 15px; font-weight: 800; color: var(--gold); }
 .dropdown-stat .stat-lbl { font-size: 9px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
-
 .dropdown-body { padding: 8px; max-height: 320px; overflow-y: auto; }
-
 .dropdown-section-label {
   font-size: 10px;
   font-weight: 700;
@@ -236,7 +311,6 @@ img { max-width: 100%; display: block; }
   letter-spacing: 1px;
   padding: 10px 12px 6px;
 }
-
 .dropdown-item {
   display: flex;
   align-items: center;
@@ -251,7 +325,6 @@ img { max-width: 100%; display: block; }
 }
 .dropdown-item:hover { background: #f5f3ff; }
 .dropdown-item:hover .dd-icon { transform: scale(1.08); }
-
 .dd-icon {
   width: 34px; height: 34px;
   border-radius: 10px;
@@ -266,11 +339,9 @@ img { max-width: 100%; display: block; }
 .dd-icon.pink { background: #fde8ef; color: #e84393; }
 .dd-icon.orange { background: #fff3e0; color: #e67e22; }
 .dd-icon.red { background: #fdeaea; color: #e74c3c; }
-
 .dd-text { flex: 1; min-width: 0; }
 .dd-text .dd-title { font-weight: 600; font-size: 13px; }
 .dd-text .dd-sub { font-size: 11px; color: var(--gray); margin-top: 1px; }
-
 .dd-badge {
   background: var(--primary);
   color: var(--white);
@@ -279,13 +350,9 @@ img { max-width: 100%; display: block; }
   border-radius: 10px;
   font-weight: 700;
 }
-
 .dropdown-item.danger { color: #e74c3c; }
 .dropdown-item.danger:hover { background: #fdeaea; }
-
 .dropdown-divider { height: 1px; background: var(--border); margin: 6px 8px; }
-
-/* Guest Login Panel */
 .guest-actions {
   padding: 14px;
   display: flex;
@@ -324,7 +391,6 @@ img { max-width: 100%; display: block; }
   transition: all 0.2s;
 }
 .guest-signup-btn:hover { background: #f0f7f8; }
-
 .guest-perks {
   padding: 4px 14px 14px;
   display: flex;
@@ -342,8 +408,6 @@ img { max-width: 100%; display: block; }
   gap: 4px;
 }
 .guest-perk::before { content: '✓'; color: #27ae60; font-weight: 700; }
-
-/* ============ END ACCOUNT SYSTEM ============ */
 
 .hero-slider { position: relative; height: 500px; overflow: hidden; }
 .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1s; }
@@ -674,6 +738,14 @@ img { max-width: 100%; display: block; }
 </head>
 <body>
 
+<!-- WhatsApp Floating Button -->
+<a href="https://wa.me/8801913821910?text=Hello%20Vayhub!%20I%20need%20help." target="_blank" class="whatsapp-float" title="Chat on WhatsApp">
+  <span class="whatsapp-tooltip">💬 Chat with us on WhatsApp</span>
+  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="white">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+  </svg>
+</a>
+
 <div id="customerSite">
   <div class="top-bar">
     <div class="top-bar-content">
@@ -935,15 +1007,15 @@ img { max-width: 100%; display: block; }
           <h1 id="adminPageTitle">Overview</h1>
         </div>
         <div class="admin-topbar-right">
-          <button class="btn-tutorial" onclick="showTutorial()">▶ Tutorial</button>
+          <button class="btn-tutorial" onclick="showTutorial()">&#9654; Tutorial</button>
           <button class="btn-support" onclick="showSupport()">Support</button>
           <div class="topbar-icon" onclick="showToast('Language: English')" title="Language">EN</div>
           <div class="topbar-icon" onclick="showToast('Translation feature coming soon')" title="Translate">Aa</div>
           <div class="topbar-icon" onclick="showHelp()" title="Help">?</div>
           <div class="topbar-icon" onclick="showToast('Search feature')" title="Search">Q</div>
-          <div class="topbar-icon" onclick="showNotifications()" title="Notifications">🔔</div>
+          <div class="topbar-icon" onclick="showNotifications()" title="Notifications">&#128276;</div>
           <div class="topbar-icon" style="background: var(--primary); color: white; font-weight: 700; font-size: 12px;">A</div>
-          <div class="premium-badge">Premium · 16 days left</div>
+          <div class="premium-badge">Premium &middot; 16 days left</div>
         </div>
       </div>
       <div class="admin-content" id="adminContent"></div>
@@ -997,7 +1069,6 @@ function saveData() {
   localStorage.setItem('vh_settings', JSON.stringify(settings));
 }
 
-// ============ NEW ACCOUNT SYSTEM ============
 function getGreeting() {
   const h = new Date().getHours();
   if (h < 12) return 'Good Morning';
@@ -1040,63 +1111,19 @@ function renderAccountDropdown() {
           </div>
         </div>
         <div class="dropdown-stats">
-          <div class="dropdown-stat">
-            <div class="stat-num">${userOrders.length}</div>
-            <div class="stat-lbl">Orders</div>
-          </div>
-          <div class="dropdown-stat">
-            <div class="stat-num">${wishlist.length}</div>
-            <div class="stat-lbl">Wishlist</div>
-          </div>
-          <div class="dropdown-stat">
-            <div class="stat-num">৳${totalSpent >= 1000 ? Math.round(totalSpent/1000) + 'k' : totalSpent}</div>
-            <div class="stat-lbl">Spent</div>
-          </div>
+          <div class="dropdown-stat"><div class="stat-num">${userOrders.length}</div><div class="stat-lbl">Orders</div></div>
+          <div class="dropdown-stat"><div class="stat-num">${wishlist.length}</div><div class="stat-lbl">Wishlist</div></div>
+          <div class="dropdown-stat"><div class="stat-num">৳${totalSpent >= 1000 ? Math.round(totalSpent/1000) + 'k' : totalSpent}</div><div class="stat-lbl">Spent</div></div>
         </div>
       </div>
       <div class="dropdown-body">
         <div class="dropdown-section-label">My Account</div>
-        <div class="dropdown-item" data-action="my-profile">
-          <div class="dd-icon purple">👤</div>
-          <div class="dd-text">
-            <div class="dd-title">My Profile</div>
-            <div class="dd-sub">View & edit your details</div>
-          </div>
-        </div>
-        <div class="dropdown-item" data-action="my-orders">
-          <div class="dd-icon teal">📦</div>
-          <div class="dd-text">
-            <div class="dd-title">My Orders</div>
-            <div class="dd-sub">Track your orders</div>
-          </div>
-          ${userOrders.length > 0 ? `<span class="dd-badge">${userOrders.length}</span>` : ''}
-        </div>
-        <div class="dropdown-item" data-action="wishlist">
-          <div class="dd-icon pink">❤</div>
-          <div class="dd-text">
-            <div class="dd-title">Wishlist</div>
-            <div class="dd-sub">Your saved items</div>
-          </div>
-          ${wishlist.length > 0 ? `<span class="dd-badge">${wishlist.length}</span>` : ''}
-        </div>
-        ${currentUser.isAdmin ? `
+        <div class="dropdown-item" data-action="my-profile"><div class="dd-icon purple">👤</div><div class="dd-text"><div class="dd-title">My Profile</div><div class="dd-sub">View & edit your details</div></div></div>
+        <div class="dropdown-item" data-action="my-orders"><div class="dd-icon teal">📦</div><div class="dd-text"><div class="dd-title">My Orders</div><div class="dd-sub">Track your orders</div></div>${userOrders.length > 0 ? `<span class="dd-badge">${userOrders.length}</span>` : ''}</div>
+        <div class="dropdown-item" data-action="wishlist"><div class="dd-icon pink">❤</div><div class="dd-text"><div class="dd-title">Wishlist</div><div class="dd-sub">Your saved items</div></div>${wishlist.length > 0 ? `<span class="dd-badge">${wishlist.length}</span>` : ''}</div>
+        ${currentUser.isAdmin ? `<div class="dropdown-divider"></div><div class="dropdown-section-label">Admin</div><div class="dropdown-item" data-action="admin"><div class="dd-icon orange">⚙</div><div class="dd-text"><div class="dd-title">Admin Panel</div><div class="dd-sub">Manage your store</div></div></div>` : ''}
         <div class="dropdown-divider"></div>
-        <div class="dropdown-section-label">Admin</div>
-        <div class="dropdown-item" data-action="admin">
-          <div class="dd-icon orange">⚙</div>
-          <div class="dd-text">
-            <div class="dd-title">Admin Panel</div>
-            <div class="dd-sub">Manage your store</div>
-          </div>
-        </div>` : ''}
-        <div class="dropdown-divider"></div>
-        <div class="dropdown-item danger" data-action="logout">
-          <div class="dd-icon red">🚪</div>
-          <div class="dd-text">
-            <div class="dd-title">Logout</div>
-            <div class="dd-sub">Sign out of your account</div>
-          </div>
-        </div>
+        <div class="dropdown-item danger" data-action="logout"><div class="dd-icon red">🚪</div><div class="dd-text"><div class="dd-title">Logout</div><div class="dd-sub">Sign out of your account</div></div></div>
       </div>
     `;
   } else {
@@ -1176,88 +1203,39 @@ function initAccountButton() {
 
 function showForgotPassword() {
   const email = prompt('Enter your registered email:');
-  if (email) {
-    showToast('Password reset link sent to your email', 'success');
-  }
+  if (email) showToast('Password reset link sent to your email', 'success');
 }
 
 function showInfoPage(type) {
   const content = document.getElementById('infoPageContent');
   const pages = {
-    about: { title: 'About Us', content: '<h1>About VAYHUB</h1><p style="margin-top: 20px; line-height: 1.8;">VAYHUB is a Bangladesh-based online fashion brand offering premium casual wear for modern everyday style. We are committed to providing high-quality clothing at affordable prices.</p>' },
-    return: { title: 'Return Policy', content: '<h1>Return Policy</h1><p style="margin-top: 20px; line-height: 1.8;">We offer 7-day return policy for all products. Items must be unused and in original packaging. Contact our support team to initiate a return.</p>' },
-    privacy: { title: 'Privacy Policy', content: '<h1>Privacy Policy</h1><p style="margin-top: 20px; line-height: 1.8;">Your privacy is important to us. We do not share your personal information with third parties. All data is securely stored and encrypted.</p>' },
-    terms: { title: 'Terms & Conditions', content: '<h1>Terms & Conditions</h1><p style="margin-top: 20px; line-height: 1.8;">By using our website, you agree to our terms and conditions. Please read carefully before making a purchase.</p>' },
-    whyus: { title: 'Why Shop With Us', content: '<h1>Why Shop With VAYHUB?</h1><ul style="margin-top: 20px; line-height: 2;"><li>Premium quality products</li><li>Affordable prices</li><li>Fast delivery</li><li>7-day return policy</li><li>Secure payment</li><li>24/7 customer support</li></ul>' },
-    payment: { title: 'Payment Methods', content: '<h1>Payment Methods</h1><p style="margin-top: 20px; line-height: 1.8;">We accept:</p><ul style="margin-top: 10px; line-height: 2;"><li>Cash on Delivery (COD)</li><li>bKash</li><li>Nagad</li><li>Bank Transfer</li></ul>' },
-    support: { title: 'After Sales Support', content: '<h1>After Sales Support</h1><p style="margin-top: 20px; line-height: 1.8;">Our dedicated support team is available 24/7 to help you with any issues. Contact us at 01913821910 or email san212128109@gmail.com</p>' },
-    faq: { title: 'FAQ', content: '<h1>Frequently Asked Questions</h1><div style="margin-top: 20px;"><h3 style="margin-top: 15px;">Q: How long does delivery take?</h3><p>A: 2-5 business days within Bangladesh.</p><h3 style="margin-top: 15px;">Q: Can I return products?</h3><p>A: Yes, we offer 7-day return policy.</p><h3 style="margin-top: 15px;">Q: What payment methods do you accept?</h3><p>A: COD, bKash, Nagad, and Bank Transfer.</p></div>' }
+    about: '<h1>About VAYHUB</h1><p style="margin-top: 20px; line-height: 1.8;">VAYHUB is a Bangladesh-based online fashion brand offering premium casual wear for modern everyday style. We are committed to providing high-quality clothing at affordable prices.</p>',
+    return: '<h1>Return Policy</h1><p style="margin-top: 20px; line-height: 1.8;">We offer 7-day return policy for all products. Items must be unused and in original packaging. Contact our support team to initiate a return.</p>',
+    privacy: '<h1>Privacy Policy</h1><p style="margin-top: 20px; line-height: 1.8;">Your privacy is important to us. We do not share your personal information with third parties. All data is securely stored and encrypted.</p>',
+    terms: '<h1>Terms & Conditions</h1><p style="margin-top: 20px; line-height: 1.8;">By using our website, you agree to our terms and conditions. Please read carefully before making a purchase.</p>',
+    whyus: '<h1>Why Shop With VAYHUB?</h1><ul style="margin-top: 20px; line-height: 2;"><li>Premium quality products</li><li>Affordable prices</li><li>Fast delivery</li><li>7-day return policy</li><li>Secure payment</li><li>24/7 customer support</li></ul>',
+    payment: '<h1>Payment Methods</h1><p style="margin-top: 20px; line-height: 1.8;">We accept:</p><ul style="margin-top: 10px; line-height: 2;"><li>Cash on Delivery (COD)</li><li>bKash</li><li>Nagad</li><li>Bank Transfer</li></ul>',
+    support: '<h1>After Sales Support</h1><p style="margin-top: 20px; line-height: 1.8;">Our dedicated support team is available 24/7 to help you with any issues. Contact us at 01913821910 or email san212128109@gmail.com</p>',
+    faq: '<h1>Frequently Asked Questions</h1><div style="margin-top: 20px;"><h3 style="margin-top: 15px;">Q: How long does delivery take?</h3><p>A: 2-5 business days within Bangladesh.</p><h3 style="margin-top: 15px;">Q: Can I return products?</h3><p>A: Yes, we offer 7-day return policy.</p><h3 style="margin-top: 15px;">Q: What payment methods do you accept?</h3><p>A: COD, bKash, Nagad, and Bank Transfer.</p></div>'
   };
-  const page = pages[type];
-  content.innerHTML = page.content;
+  content.innerHTML = pages[type] || '';
   document.getElementById('infoPage').classList.add('active');
 }
 
-function showTutorial() {
-  alert('Tutorial:\n\n1. Dashboard: View sales overview\n2. Products: Manage your products\n3. Orders: Track customer orders\n4. Customers: View customer list\n5. Settings: Configure store settings\n\nFor more help, contact support.');
-}
-
-function showSupport() {
-  alert('Need help? Contact us:\n\nPhone: 01913821910\nEmail: san212128109@gmail.com\nAddress: Mymensingh, Bangladesh\n\nSupport Hours: 24/7');
-}
-
-function showHelp() {
-  alert('Help Center\n\nQuick Tips:\n• Click on products to view details\n• Use search to find products\n• Add items to cart and checkout\n• Track orders in My Orders\n\nFor more help, click Tutorial button.');
-}
-
-function showNotifications() {
-  alert('Notifications\n\n• Welcome to Vayhub Admin Panel!\n• You have 0 new orders\n• System is running smoothly');
-}
+function showTutorial() { alert('Tutorial:\n\n1. Dashboard: View sales overview\n2. Products: Manage your products\n3. Orders: Track customer orders\n4. Customers: View customer list\n5. Settings: Configure store settings\n\nFor more help, contact support.'); }
+function showSupport() { alert('Need help? Contact us:\n\nPhone: 01913821910\nEmail: san212128109@gmail.com\nAddress: Mymensingh, Bangladesh\n\nSupport Hours: 24/7'); }
+function showHelp() { alert('Help Center\n\nQuick Tips:\n• Click on products to view details\n• Use search to find products\n• Add items to cart and checkout\n• Track orders in My Orders\n\nFor more help, click Tutorial button.'); }
+function showNotifications() { alert('Notifications\n\n• Welcome to Vayhub Admin Panel!\n• You have 0 new orders\n• System is running smoothly'); }
 
 function showMyOrders() {
   if (!currentUser) { showCustomerPage('login'); return; }
   const userOrders = orders.filter(o => o.user === currentUser.email).reverse();
   const content = document.getElementById('checkoutContent');
-  let html = `<div style="max-width: 900px; margin: 30px auto; padding: 0 20px;">
-    <h1 style="margin-bottom: 20px; font-size: 24px;">My Orders</h1>`;
+  let html = `<div style="max-width: 900px; margin: 30px auto; padding: 0 20px;"><h1 style="margin-bottom: 20px; font-size: 24px;">My Orders</h1>`;
   if (userOrders.length === 0) {
-    html += `<div style="background: var(--white); padding: 60px 20px; border-radius: 12px; text-align: center;">
-      <p style="font-size: 40px; margin-bottom: 15px;">📦</p>
-      <h3 style="margin-bottom: 8px;">No orders yet</h3>
-      <p style="color: var(--gray); margin-bottom: 20px;">Start shopping to see your orders here</p>
-      <button class="btn btn-primary" style="padding: 10px 24px;" onclick="closePage('checkoutPage')">Continue Shopping</button>
-    </div>`;
+    html += `<div style="background: var(--white); padding: 60px 20px; border-radius: 12px; text-align: center;"><p style="font-size: 40px; margin-bottom: 15px;">📦</p><h3 style="margin-bottom: 8px;">No orders yet</h3><p style="color: var(--gray); margin-bottom: 20px;">Start shopping to see your orders here</p><button class="btn btn-primary" style="padding: 10px 24px;" onclick="closePage('checkoutPage')">Continue Shopping</button></div>`;
   } else {
-    html += userOrders.map(o => `
-      <div style="background: var(--white); border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
-          <div>
-            <div style="font-size: 11px; color: var(--gray);">Order ID</div>
-            <div style="font-weight: 700; font-size: 14px;">#${o.id}</div>
-            <div style="font-size: 11px; color: var(--gray); margin-top: 4px;">${new Date(o.date).toLocaleString()}</div>
-          </div>
-          <div style="text-align: right;">
-            <span style="background: ${o.status==='delivered'?'#27ae60':o.status==='cancelled'?'#e74c3c':o.status==='confirmed'?'#3498db':'#f39c12'}; color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase;">${o.status}</span>
-            <div style="font-size: 18px; font-weight: 900; color: var(--teal); margin-top: 6px;">৳${o.total}</div>
-          </div>
-        </div>
-        <div style="border-top: 1px solid var(--border); padding-top: 12px;">
-          ${o.items.map(item => {
-            const p = products.find(pr => pr.id === item.id);
-            return p ? `<div style="display: flex; gap: 10px; align-items: center; padding: 6px 0;">
-              <img src="${p.image}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
-              <div style="flex: 1; font-size: 13px;">${p.name} <span style="color: var(--gray);">× ${item.qty || 1}</span></div>
-              <div style="font-weight: 600; font-size: 13px;">৳${p.price * (item.qty || 1)}</div>
-            </div>` : '';
-          }).join('')}
-        </div>
-        ${o.checkoutInfo ? `<div style="border-top: 1px solid var(--border); padding-top: 12px; margin-top: 10px; font-size: 12px; color: var(--gray);">
-          <strong style="color: var(--text);">Delivery:</strong> ${o.checkoutInfo.name} | ${o.checkoutInfo.phone}<br>
-          ${o.checkoutInfo.address}${o.checkoutInfo.city ? ', ' + o.checkoutInfo.city : ''}
-          ${o.checkoutInfo.payment ? '<br><strong style="color: var(--text);">Payment:</strong> ' + o.checkoutInfo.payment : ''}
-        </div>` : ''}
-      </div>
-    `).join('');
+    html += userOrders.map(o => `<div style="background: var(--white); border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);"><div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;"><div><div style="font-size: 11px; color: var(--gray);">Order ID</div><div style="font-weight: 700; font-size: 14px;">#${o.id}</div><div style="font-size: 11px; color: var(--gray); margin-top: 4px;">${new Date(o.date).toLocaleString()}</div></div><div style="text-align: right;"><span style="background: ${o.status==='delivered'?'#27ae60':o.status==='cancelled'?'#e74c3c':o.status==='confirmed'?'#3498db':'#f39c12'}; color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase;">${o.status}</span><div style="font-size: 18px; font-weight: 900; color: var(--teal); margin-top: 6px;">৳${o.total}</div></div></div><div style="border-top: 1px solid var(--border); padding-top: 12px;">${o.items.map(item => { const p = products.find(pr => pr.id === item.id); return p ? `<div style="display: flex; gap: 10px; align-items: center; padding: 6px 0;"><img src="${p.image}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;"><div style="flex: 1; font-size: 13px;">${p.name} <span style="color: var(--gray);">× ${item.qty || 1}</span></div><div style="font-weight: 600; font-size: 13px;">৳${p.price * (item.qty || 1)}</div></div>` : ''; }).join('')}</div>${o.checkoutInfo ? `<div style="border-top: 1px solid var(--border); padding-top: 12px; margin-top: 10px; font-size: 12px; color: var(--gray);"><strong style="color: var(--text);">Delivery:</strong> ${o.checkoutInfo.name} | ${o.checkoutInfo.phone}<br>${o.checkoutInfo.address}${o.checkoutInfo.city ? ', ' + o.checkoutInfo.city : ''}${o.checkoutInfo.payment ? '<br><strong style="color: var(--text);">Payment:</strong> ' + o.checkoutInfo.payment : ''}</div>` : ''}</div>`).join('');
   }
   html += `</div>`;
   content.innerHTML = html;
@@ -1269,73 +1247,21 @@ function showMyProfile() {
   const userOrders = orders.filter(o => o.user === currentUser.email);
   const totalSpent = userOrders.reduce((s, o) => s + o.total, 0);
   const content = document.getElementById('checkoutContent');
-  content.innerHTML = `
-    <div style="max-width: 600px; margin: 30px auto; padding: 0 20px;">
-      <h1 style="margin-bottom: 20px; font-size: 24px;">My Profile</h1>
-      <div style="background: var(--white); border-radius: 12px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-        <div style="text-align: center; margin-bottom: 25px;">
-          <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--teal), #4a9aa8); color: white; font-size: 32px; font-weight: 900; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">${currentUser.name.charAt(0).toUpperCase()}</div>
-          <h2 style="font-size: 20px;">${currentUser.name}</h2>
-          <p style="color: var(--gray); font-size: 13px;">${currentUser.email}</p>
-          <span style="display: inline-block; margin-top: 8px; padding: 3px 12px; border-radius: 12px; font-size: 11px; font-weight: 700; background: ${currentUser.isAdmin ? '#fff3e0' : '#e8f5e9'}; color: ${currentUser.isAdmin ? '#e67e22' : '#27ae60'};">${currentUser.isAdmin ? 'Admin' : 'Customer'}</span>
-        </div>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px;">
-          <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
-            <div style="font-size: 22px; font-weight: 900; color: var(--teal);">${userOrders.length}</div>
-            <div style="font-size: 11px; color: var(--gray); margin-top: 4px;">Orders</div>
-          </div>
-          <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
-            <div style="font-size: 22px; font-weight: 900; color: var(--teal);">৳${totalSpent}</div>
-            <div style="font-size: 11px; color: var(--gray); margin-top: 4px;">Total Spent</div>
-          </div>
-          <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
-            <div style="font-size: 22px; font-weight: 900; color: var(--teal);">${wishlist.length}</div>
-            <div style="font-size: 11px; color: var(--gray); margin-top: 4px;">Wishlist</div>
-          </div>
-        </div>
-        <div class="form-group"><label>Full Name</label><input type="text" id="profileName" value="${currentUser.name}"></div>
-        <div class="form-group"><label>Email / Phone</label><input type="text" value="${currentUser.email}" disabled style="background: #f5f5f5;"></div>
-        <div class="form-group"><label>Member Since</label><input type="text" value="${currentUser.joinedDate ? new Date(currentUser.joinedDate).toLocaleDateString() : 'N/A'}" disabled style="background: #f5f5f5;"></div>
-        <button class="btn btn-primary" style="padding: 12px 24px; width: 100%;" onclick="updateProfile()">Update Profile</button>
-      </div>
-    </div>
-  `;
+  content.innerHTML = `<div style="max-width: 600px; margin: 30px auto; padding: 0 20px;"><h1 style="margin-bottom: 20px; font-size: 24px;">My Profile</h1><div style="background: var(--white); border-radius: 12px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);"><div style="text-align: center; margin-bottom: 25px;"><div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--teal), #4a9aa8); color: white; font-size: 32px; font-weight: 900; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">${currentUser.name.charAt(0).toUpperCase()}</div><h2 style="font-size: 20px;">${currentUser.name}</h2><p style="color: var(--gray); font-size: 13px;">${currentUser.email}</p><span style="display: inline-block; margin-top: 8px; padding: 3px 12px; border-radius: 12px; font-size: 11px; font-weight: 700; background: ${currentUser.isAdmin ? '#fff3e0' : '#e8f5e9'}; color: ${currentUser.isAdmin ? '#e67e22' : '#27ae60'};">${currentUser.isAdmin ? 'Admin' : 'Customer'}</span></div><div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px;"><div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;"><div style="font-size: 22px; font-weight: 900; color: var(--teal);">${userOrders.length}</div><div style="font-size: 11px; color: var(--gray); margin-top: 4px;">Orders</div></div><div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;"><div style="font-size: 22px; font-weight: 900; color: var(--teal);">৳${totalSpent}</div><div style="font-size: 11px; color: var(--gray); margin-top: 4px;">Total Spent</div></div><div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;"><div style="font-size: 22px; font-weight: 900; color: var(--teal);">${wishlist.length}</div><div style="font-size: 11px; color: var(--gray); margin-top: 4px;">Wishlist</div></div></div><div class="form-group"><label>Full Name</label><input type="text" id="profileName" value="${currentUser.name}"></div><div class="form-group"><label>Email / Phone</label><input type="text" value="${currentUser.email}" disabled style="background: #f5f5f5;"></div><div class="form-group"><label>Member Since</label><input type="text" value="${currentUser.joinedDate ? new Date(currentUser.joinedDate).toLocaleDateString() : 'N/A'}" disabled style="background: #f5f5f5;"></div><button class="btn btn-primary" style="padding: 12px 24px; width: 100%;" onclick="updateProfile()">Update Profile</button></div></div>`;
   document.getElementById('checkoutPage').classList.add('active');
 }
 
 function showWishlistPage() {
   const wishProducts = products.filter(p => wishlist.includes(p.id));
   const content = document.getElementById('checkoutContent');
-  let html = `<div style="max-width: 1000px; margin: 30px auto; padding: 0 20px;">
-    <h1 style="margin-bottom: 20px; font-size: 24px;">My Wishlist (${wishProducts.length})</h1>`;
+  let html = `<div style="max-width: 1000px; margin: 30px auto; padding: 0 20px;"><h1 style="margin-bottom: 20px; font-size: 24px;">My Wishlist (${wishProducts.length})</h1>`;
   if (wishProducts.length === 0) {
-    html += `<div style="background: var(--white); padding: 60px 20px; border-radius: 12px; text-align: center;">
-      <p style="font-size: 40px; margin-bottom: 15px;">❤</p>
-      <h3 style="margin-bottom: 8px;">Your wishlist is empty</h3>
-      <p style="color: var(--gray); margin-bottom: 20px;">Save your favorite items here</p>
-      <button class="btn btn-primary" style="padding: 10px 24px;" onclick="closePage('checkoutPage')">Browse Products</button>
-    </div>`;
+    html += `<div style="background: var(--white); padding: 60px 20px; border-radius: 12px; text-align: center;"><p style="font-size: 40px; margin-bottom: 15px;">❤</p><h3 style="margin-bottom: 8px;">Your wishlist is empty</h3><p style="color: var(--gray); margin-bottom: 20px;">Save your favorite items here</p><button class="btn btn-primary" style="padding: 10px 24px;" onclick="closePage('checkoutPage')">Browse Products</button></div>`;
   } else {
     html += `<div class="products-grid">`;
     html += wishProducts.map(p => {
       const discount = Math.round((1 - p.price/p.oldPrice) * 100);
-      return `
-        <div class="product-card">
-          ${discount > 0 ? `<div class="discount-badge">-${discount}%</div>` : ''}
-          <div class="img-wrap" onclick="showProductDetail(${p.id})">
-            <img src="${p.image}" alt="${p.name}">
-            <button class="add-cart-btn" onclick="event.stopPropagation(); addToCart(${p.id})" style="opacity:1; transform:none;">+</button>
-          </div>
-          <div class="product-info">
-            <div class="product-name">${p.name}</div>
-            <div class="product-price">
-              <span class="price-old">৳${p.oldPrice}</span>
-              <span class="price-current">৳${p.price}</span>
-            </div>
-            <button class="btn btn-danger btn-sm" style="width: 100%; margin-top: 8px;" onclick="removeFromWishlist(${p.id})">Remove</button>
-          </div>
-        </div>
-      `;
+      return `<div class="product-card">${discount > 0 ? `<div class="discount-badge">-${discount}%</div>` : ''}<div class="img-wrap" onclick="showProductDetail(${p.id})"><img src="${p.image}" alt="${p.name}"><button class="add-cart-btn" onclick="event.stopPropagation(); addToCart(${p.id})" style="opacity:1; transform:none;">+</button></div><div class="product-info"><div class="product-name">${p.name}</div><div class="product-price"><span class="price-old">${p.oldPrice}</span><span class="price-current">৳${p.price}</span></div><button class="btn btn-danger btn-sm" style="width: 100%; margin-top: 8px;" onclick="removeFromWishlist(${p.id})">Remove</button></div></div>`;
     }).join('');
     html += `</div>`;
   }
@@ -1346,13 +1272,7 @@ function showWishlistPage() {
 
 function removeFromWishlist(id) {
   const idx = wishlist.indexOf(id);
-  if (idx > -1) {
-    wishlist.splice(idx, 1);
-    saveData();
-    renderProducts();
-    showWishlistPage();
-    showToast('Removed from wishlist');
-  }
+  if (idx > -1) { wishlist.splice(idx, 1); saveData(); renderProducts(); showWishlistPage(); showToast('Removed from wishlist'); }
 }
 
 function updateProfile() {
@@ -1361,100 +1281,49 @@ function updateProfile() {
   currentUser.name = newName;
   const idx = users.findIndex(u => u.email === currentUser.email);
   if (idx > -1) users[idx].name = newName;
-  saveData();
-  updateAccountButton();
+  saveData(); updateAccountButton();
   showToast('Profile updated!', 'success');
 }
 
 function handleLogout() {
-  currentUser = null;
-  saveData();
-  updateAccountButton();
+  currentUser = null; saveData(); updateAccountButton();
   showToast('Logged out successfully', 'success');
   closePage('checkoutPage');
 }
 
 function renderCategories() {
   const grid = document.getElementById('categoriesGrid');
-  grid.innerHTML = categories.map((cat, i) => `
-    <div class="category-card" onclick="filterProducts('${cat.name.toLowerCase()}')">
-      <img src="${cat.image}" alt="${cat.name}" onerror="this.src='https://via.placeholder.com/300x400/cccccc/666666?text=${cat.name}'">
-      <div class="cat-number">0${i+1}</div>
-      <div class="overlay">
-        <div class="cat-count">${cat.count} Products</div>
-        <div class="cat-name">${cat.name}</div>
-        <div class="shop-btn">Shop Now &rarr;</div>
-      </div>
-    </div>
-  `).join('');
+  grid.innerHTML = categories.map((cat, i) => `<div class="category-card" onclick="filterProducts('${cat.name.toLowerCase()}')"><img src="${cat.image}" alt="${cat.name}" onerror="this.src='https://via.placeholder.com/300x400/cccccc/666666?text=${cat.name}'"><div class="cat-number">0${i+1}</div><div class="overlay"><div class="cat-count">${cat.count} Products</div><div class="cat-name">${cat.name}</div><div class="shop-btn">Shop Now &rarr;</div></div></div>`).join('');
 }
 
 function renderProducts(filter = 'all') {
   const grid = document.getElementById('productsGrid');
   const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
-  if (filtered.length === 0) {
-    grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--gray);">No products found</p>';
-    return;
-  }
+  if (filtered.length === 0) { grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--gray);">No products found</p>'; return; }
   grid.innerHTML = filtered.map(p => {
     const discount = Math.round((1 - p.price/p.oldPrice) * 100);
     const isWishlisted = wishlist.includes(p.id);
-    return `
-      <div class="product-card" onclick="showProductDetail(${p.id})">
-        ${discount > 0 ? `<div class="discount-badge">-${discount}%</div>` : ''}
-        <div class="img-wrap">
-          <img src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/300x400/cccccc/666666?text=Product'">
-          <div class="product-actions">
-            <button class="action-btn ${isWishlisted ? 'wishlisted' : ''}" onclick="event.stopPropagation(); toggleWishlist(${p.id})">${isWishlisted ? '♥' : '♡'}</button>
-          </div>
-          <button class="add-cart-btn" onclick="event.stopPropagation(); addToCart(${p.id})">+</button>
-        </div>
-        <div class="product-info">
-          <div class="product-name">${p.name}</div>
-          <div class="product-price">
-            <span class="price-old">৳${p.oldPrice}</span>
-            <span class="price-current">৳${p.price}</span>
-          </div>
-        </div>
-      </div>
-    `;
+    return `<div class="product-card" onclick="showProductDetail(${p.id})">${discount > 0 ? `<div class="discount-badge">-${discount}%</div>` : ''}<div class="img-wrap"><img src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/300x400/cccccc/666666?text=Product'"><div class="product-actions"><button class="action-btn ${isWishlisted ? 'wishlisted' : ''}" onclick="event.stopPropagation(); toggleWishlist(${p.id})">${isWishlisted ? '♥' : '♡'}</button></div><button class="add-cart-btn" onclick="event.stopPropagation(); addToCart(${p.id})">+</button></div><div class="product-info"><div class="product-name">${p.name}</div><div class="product-price"><span class="price-old">৳${p.oldPrice}</span><span class="price-current">৳${p.price}</span></div></div></div>`;
   }).join('');
 }
 
 function renderFilterChips() {
   const chips = document.getElementById('filterChips');
   const cats = ['all', ...categories.map(c => c.name.toLowerCase())];
-  chips.innerHTML = cats.map(c => `
-    <div class="filter-chip ${c==='all'?'active':''}" onclick="filterProducts('${c}', this)" style="padding: 8px 16px; border: 2px solid var(--border); border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; background: var(--white);">${c === 'all' ? 'All' : c.charAt(0).toUpperCase() + c.slice(1)}</div>
-  `).join('');
+  chips.innerHTML = cats.map(c => `<div class="filter-chip ${c==='all'?'active':''}" onclick="filterProducts('${c}', this)" style="padding: 8px 16px; border: 2px solid var(--border); border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; background: var(--white);">${c === 'all' ? 'All' : c.charAt(0).toUpperCase() + c.slice(1)}</div>`).join('');
 }
 
-function updateCartCount() {
-  document.getElementById('cartCount').textContent = cart.length;
-}
+function updateCartCount() { document.getElementById('cartCount').textContent = cart.length; }
 
 function renderCart() {
   const items = document.getElementById('cartItems');
-  if (cart.length === 0) {
-    items.innerHTML = '<p style="text-align: center; color: var(--gray); padding: 40px 0;">Your cart is empty</p>';
-    document.getElementById('cartTotal').textContent = '৳0';
-    return;
-  }
+  if (cart.length === 0) { items.innerHTML = '<p style="text-align: center; color: var(--gray); padding: 40px 0;">Your cart is empty</p>'; document.getElementById('cartTotal').textContent = '৳0'; return; }
   let total = 0;
   items.innerHTML = cart.map((item, i) => {
     const product = products.find(p => p.id === item.id);
     if (!product) return '';
     total += product.price * (item.qty || 1);
-    return `
-      <div class="cart-item">
-        <img src="${product.image}" alt="${product.name}">
-        <div class="cart-item-info">
-          <h4>${product.name}</h4>
-          <div class="cart-item-price">৳${product.price} × ${item.qty || 1}</div>
-        </div>
-        <button class="remove-item" onclick="removeFromCart(${i})">×</button>
-      </div>
-    `;
+    return `<div class="cart-item"><img src="${product.image}" alt="${product.name}"><div class="cart-item-info"><h4>${product.name}</h4><div class="cart-item-price">${product.price} × ${item.qty || 1}</div></div><button class="remove-item" onclick="removeFromCart(${i})">×</button></div>`;
   }).join('');
   document.getElementById('cartTotal').textContent = '৳' + total;
 }
@@ -1462,10 +1331,8 @@ function renderCart() {
 function updateSocialLinks() {
   const fbLink = document.getElementById('fbLink');
   const ytLink = document.getElementById('ytLink');
-  if (settings.facebook) { fbLink.href = settings.facebook; fbLink.style.display = 'flex'; }
-  else fbLink.style.display = 'none';
-  if (settings.youtube) { ytLink.href = settings.youtube; ytLink.style.display = 'flex'; }
-  else ytLink.style.display = 'none';
+  if (settings.facebook) { fbLink.href = settings.facebook; fbLink.style.display = 'flex'; } else fbLink.style.display = 'none';
+  if (settings.youtube) { ytLink.href = settings.youtube; ytLink.style.display = 'flex'; } else ytLink.style.display = 'none';
 }
 
 function showCustomerPage(page) {
@@ -1478,11 +1345,7 @@ function showCustomerPage(page) {
   document.getElementById('navLinks').classList.remove('show');
   if (page === 'login') document.getElementById('loginPage').classList.add('active');
   else if (page === 'signup') document.getElementById('signupPage').classList.add('active');
-  else if (page === 'admin') {
-    document.getElementById('adminPage').classList.add('active');
-    renderAdminNav();
-    showAdminTab('dashboard');
-  }
+  else if (page === 'admin') { document.getElementById('adminPage').classList.add('active'); renderAdminNav(); showAdminTab('dashboard'); }
   else window.scrollTo(0, 0);
 }
 
@@ -1490,10 +1353,7 @@ function closePage(id) { document.getElementById(id).classList.remove('active');
 
 function scrollToSection(id) {
   showCustomerPage('home');
-  setTimeout(() => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  }, 100);
+  setTimeout(() => { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 100);
 }
 
 let currentSlide = 0;
@@ -1514,38 +1374,24 @@ function goToSlide(i) {
 setInterval(() => changeSlide(1), 5000);
 
 function filterProducts(cat, el) {
-  if (el) {
-    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-  }
-  renderProducts(cat);
-  scrollToSection('productsSection');
+  if (el) { document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active')); el.classList.add('active'); }
+  renderProducts(cat); scrollToSection('productsSection');
 }
 
 function addToCart(id) {
   const existing = cart.find(c => c.id === id);
-  if (existing) existing.qty = (existing.qty || 1) + 1;
-  else cart.push({ id, qty: 1 });
+  if (existing) existing.qty = (existing.qty || 1) + 1; else cart.push({ id, qty: 1 });
   saveData(); updateCartCount(); renderCart();
   showToast('Added to cart!', 'success');
 }
 
-function removeFromCart(index) {
-  cart.splice(index, 1);
-  saveData(); updateCartCount(); renderCart();
-  showToast('Removed from cart', 'success');
-}
-
-function toggleCart() {
-  document.getElementById('cartSidebar').classList.toggle('active');
-  renderCart();
-}
+function removeFromCart(index) { cart.splice(index, 1); saveData(); updateCartCount(); renderCart(); showToast('Removed from cart', 'success'); }
+function toggleCart() { document.getElementById('cartSidebar').classList.toggle('active'); renderCart(); }
 
 function goToCheckout() {
   if (cart.length === 0) { showToast('Cart is empty!', 'error'); return; }
   if (!currentUser) { showToast('Please login first!', 'error'); toggleCart(); showCustomerPage('login'); return; }
-  toggleCart();
-  renderCheckoutPage();
+  toggleCart(); renderCheckoutPage();
   document.getElementById('checkoutPage').classList.add('active');
 }
 
@@ -1557,109 +1403,14 @@ function renderCheckoutPage() {
     if (!p) return '';
     const lineTotal = p.price * (item.qty || 1);
     subtotal += lineTotal;
-    return `
-      <div class="checkout-summary-item">
-        <img src="${p.image}" alt="${p.name}">
-        <div class="item-info">
-          <h4>${p.name}</h4>
-          <div class="item-meta">Qty: ${item.qty || 1} ${item.size ? '| Size: ' + item.size : ''}</div>
-        </div>
-        <div class="item-price">৳${lineTotal}</div>
-      </div>
-    `;
+    return `<div class="checkout-summary-item"><img src="${p.image}" alt="${p.name}"><div class="item-info"><h4>${p.name}</h4><div class="item-meta">Qty: ${item.qty || 1} ${item.size ? '| Size: ' + item.size : ''}</div></div><div class="item-price">৳${lineTotal}</div></div>`;
   }).join('');
-
   const deliveryCharge = 60;
   const grandTotal = subtotal + deliveryCharge;
-
-  content.innerHTML = `
-    <div style="max-width: 1100px; margin: 30px auto; padding: 0 20px;">
-      <h1 style="margin-bottom: 20px; font-size: 24px;">Checkout</h1>
-      <div class="checkout-container" style="margin: 0;">
-        <div>
-          <div class="checkout-section" style="margin-bottom: 20px;">
-            <h2><span class="step-num">1</span> Shipping Information</h2>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Full Name *</label>
-                <input type="text" id="chkName" value="${currentUser.name}" placeholder="Your full name">
-              </div>
-              <div class="form-group">
-                <label>Phone Number *</label>
-                <input type="text" id="chkPhone" placeholder="01XXXXXXXXX">
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Email</label>
-              <input type="email" id="chkEmail" value="${currentUser.email}" placeholder="Email address">
-            </div>
-            <div class="form-group">
-              <label>Full Address *</label>
-              <textarea id="chkAddress" rows="2" placeholder="House no, Road, Area"></textarea>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>City / District *</label>
-                <input type="text" id="chkCity" placeholder="e.g. Dhaka, Mymensingh">
-              </div>
-              <div class="form-group">
-                <label>Postal Code</label>
-                <input type="text" id="chkZip" placeholder="Optional">
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Order Notes</label>
-              <textarea id="chkNotes" rows="2" placeholder="Any special instructions (optional)"></textarea>
-            </div>
-          </div>
-
-          <div class="checkout-section">
-            <h2><span class="step-num">2</span> Payment Method</h2>
-            <div class="payment-options">
-              <div class="payment-option selected" onclick="selectPayment(this, 'Cash on Delivery')">
-                <div class="pay-icon">💵</div>
-                <div class="pay-name">Cash on Delivery</div>
-              </div>
-              <div class="payment-option" onclick="selectPayment(this, 'bKash')">
-                <div class="pay-icon">📱</div>
-                <div class="pay-name">bKash</div>
-              </div>
-              <div class="payment-option" onclick="selectPayment(this, 'Nagad')">
-                <div class="pay-icon">💳</div>
-                <div class="pay-name">Nagad</div>
-              </div>
-              <div class="payment-option" onclick="selectPayment(this, 'Bank Transfer')">
-                <div class="pay-icon">🏦</div>
-                <div class="pay-name">Bank Transfer</div>
-              </div>
-            </div>
-            <input type="hidden" id="chkPayment" value="Cash on Delivery">
-          </div>
-        </div>
-
-        <div>
-          <div class="checkout-section" style="position: sticky; top: 80px;">
-            <h2><span class="step-num">3</span> Order Summary</h2>
-            ${itemsHtml}
-            <div class="checkout-totals">
-              <div class="total-row"><span>Subtotal</span><span>৳${subtotal}</span></div>
-              <div class="total-row"><span>Delivery Charge</span><span>৳${deliveryCharge}</span></div>
-              <div class="total-row grand"><span>Total</span><span>৳${grandTotal}</span></div>
-            </div>
-            <button class="place-order-btn" onclick="placeOrder()">Place Order →</button>
-            <p style="text-align: center; font-size: 11px; color: var(--gray); margin-top: 10px;">By placing order you agree to our terms & conditions</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
+  content.innerHTML = `<div style="max-width: 1100px; margin: 30px auto; padding: 0 20px;"><h1 style="margin-bottom: 20px; font-size: 24px;">Checkout</h1><div class="checkout-container" style="margin: 0;"><div><div class="checkout-section" style="margin-bottom: 20px;"><h2><span class="step-num">1</span> Shipping Information</h2><div class="form-row"><div class="form-group"><label>Full Name *</label><input type="text" id="chkName" value="${currentUser.name}" placeholder="Your full name"></div><div class="form-group"><label>Phone Number *</label><input type="text" id="chkPhone" placeholder="01XXXXXXXXX"></div></div><div class="form-group"><label>Email</label><input type="email" id="chkEmail" value="${currentUser.email}" placeholder="Email address"></div><div class="form-group"><label>Full Address *</label><textarea id="chkAddress" rows="2" placeholder="House no, Road, Area"></textarea></div><div class="form-row"><div class="form-group"><label>City / District *</label><input type="text" id="chkCity" placeholder="e.g. Dhaka, Mymensingh"></div><div class="form-group"><label>Postal Code</label><input type="text" id="chkZip" placeholder="Optional"></div></div><div class="form-group"><label>Order Notes</label><textarea id="chkNotes" rows="2" placeholder="Any special instructions (optional)"></textarea></div></div><div class="checkout-section"><h2><span class="step-num">2</span> Payment Method</h2><div class="payment-options"><div class="payment-option selected" onclick="selectPayment(this, 'Cash on Delivery')"><div class="pay-icon"></div><div class="pay-name">Cash on Delivery</div></div><div class="payment-option" onclick="selectPayment(this, 'bKash')"><div class="pay-icon">📱</div><div class="pay-name">bKash</div></div><div class="payment-option" onclick="selectPayment(this, 'Nagad')"><div class="pay-icon">💳</div><div class="pay-name">Nagad</div></div><div class="payment-option" onclick="selectPayment(this, 'Bank Transfer')"><div class="pay-icon">🏦</div><div class="pay-name">Bank Transfer</div></div></div><input type="hidden" id="chkPayment" value="Cash on Delivery"></div></div><div><div class="checkout-section" style="position: sticky; top: 80px;"><h2><span class="step-num">3</span> Order Summary</h2>${itemsHtml}<div class="checkout-totals"><div class="total-row"><span>Subtotal</span><span>৳${subtotal}</span></div><div class="total-row"><span>Delivery Charge</span><span>৳${deliveryCharge}</span></div><div class="total-row grand"><span>Total</span><span>৳${grandTotal}</span></div></div><button class="place-order-btn" onclick="placeOrder()">Place Order →</button><p style="text-align: center; font-size: 11px; color: var(--gray); margin-top: 10px;">By placing order you agree to our terms & conditions</p></div></div></div></div>`;
 }
 
-function selectPayment(el, method) {
-  document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
-  el.classList.add('selected');
-  document.getElementById('chkPayment').value = method;
-}
+function selectPayment(el, method) { document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected')); el.classList.add('selected'); document.getElementById('chkPayment').value = method; }
 
 function placeOrder() {
   const name = document.getElementById('chkName').value.trim();
@@ -1670,73 +1421,26 @@ function placeOrder() {
   const zip = document.getElementById('chkZip').value.trim();
   const notes = document.getElementById('chkNotes').value.trim();
   const payment = document.getElementById('chkPayment').value;
-
-  if (!name || !phone || !address || !city) {
-    showToast('Please fill all required fields!', 'error');
-    return;
-  }
-  if (!/^01[0-9]{9}$/.test(phone)) {
-    showToast('Please enter a valid phone number!', 'error');
-    return;
-  }
-
+  if (!name || !phone || !address || !city) { showToast('Please fill all required fields!', 'error'); return; }
+  if (!/^01[0-9]{9}$/.test(phone)) { showToast('Please enter a valid phone number!', 'error'); return; }
   let subtotal = 0;
-  cart.forEach(item => {
-    const p = products.find(pr => pr.id === item.id);
-    if (p) subtotal += p.price * (item.qty || 1);
-  });
+  cart.forEach(item => { const p = products.find(pr => pr.id === item.id); if (p) subtotal += p.price * (item.qty || 1); });
   const deliveryCharge = 60;
   const total = subtotal + deliveryCharge;
-
-  const order = {
-    id: Date.now(),
-    user: currentUser.email,
-    items: [...cart],
-    total,
-    subtotal,
-    deliveryCharge,
-    date: new Date().toISOString(),
-    status: 'pending',
-    checkoutInfo: { name, phone, email, address, city, zip, notes, payment }
-  };
-
-  orders.push(order);
-  cart = [];
-  saveData();
-  updateCartCount();
-  renderCart();
-
+  const order = { id: Date.now(), user: currentUser.email, items: [...cart], total, subtotal, deliveryCharge, date: new Date().toISOString(), status: 'pending', checkoutInfo: { name, phone, email, address, city, zip, notes, payment } };
+  orders.push(order); cart = []; saveData(); updateCartCount(); renderCart();
   showOrderSuccess(order);
 }
 
 function showOrderSuccess(order) {
   const content = document.getElementById('checkoutContent');
-  content.innerHTML = `
-    <div class="order-success">
-      <div class="success-icon">✓</div>
-      <h2>Order Placed Successfully!</h2>
-      <p style="color: var(--gray); margin-bottom: 15px;">Thank you for shopping with Vayhub. We'll process your order shortly.</p>
-      <div class="order-id">Order ID: #${order.id}</div>
-      <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: left; margin: 20px 0;">
-        <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px;"><span style="color: var(--gray);">Customer:</span><strong>${order.checkoutInfo.name}</strong></div>
-        <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px;"><span style="color: var(--gray);">Phone:</span><strong>${order.checkoutInfo.phone}</strong></div>
-        <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px;"><span style="color: var(--gray);">Address:</span><strong>${order.checkoutInfo.address}, ${order.checkoutInfo.city}</strong></div>
-        <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px;"><span style="color: var(--gray);">Payment:</span><strong>${order.checkoutInfo.payment}</strong></div>
-        <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; border-top: 1px dashed var(--border); margin-top: 8px; padding-top: 12px;"><span style="color: var(--gray);">Total Amount:</span><strong style="color: var(--teal); font-size: 16px;">৳${order.total}</strong></div>
-      </div>
-      <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-        <button class="btn btn-primary" style="padding: 12px 24px;" onclick="showMyOrders()">View My Orders</button>
-        <button class="btn" style="padding: 12px 24px; background: var(--border);" onclick="closePage('checkoutPage'); showCustomerPage('home');">Continue Shopping</button>
-      </div>
-    </div>
-  `;
+  content.innerHTML = `<div class="order-success"><div class="success-icon">✓</div><h2>Order Placed Successfully!</h2><p style="color: var(--gray); margin-bottom: 15px;">Thank you for shopping with Vayhub. We'll process your order shortly.</p><div class="order-id">Order ID: #${order.id}</div><div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: left; margin: 20px 0;"><div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px;"><span style="color: var(--gray);">Customer:</span><strong>${order.checkoutInfo.name}</strong></div><div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px;"><span style="color: var(--gray);">Phone:</span><strong>${order.checkoutInfo.phone}</strong></div><div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px;"><span style="color: var(--gray);">Address:</span><strong>${order.checkoutInfo.address}, ${order.checkoutInfo.city}</strong></div><div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px;"><span style="color: var(--gray);">Payment:</span><strong>${order.checkoutInfo.payment}</strong></div><div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; border-top: 1px dashed var(--border); margin-top: 8px; padding-top: 12px;"><span style="color: var(--gray);">Total Amount:</span><strong style="color: var(--teal); font-size: 16px;">৳${order.total}</strong></div></div><div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;"><button class="btn btn-primary" style="padding: 12px 24px;" onclick="showMyOrders()">View My Orders</button><button class="btn" style="padding: 12px 24px; background: var(--border);" onclick="closePage('checkoutPage'); showCustomerPage('home');">Continue Shopping</button></div></div>`;
   showToast('Order placed successfully!', 'success');
 }
 
 function toggleWishlist(id) {
   const idx = wishlist.indexOf(id);
-  if (idx > -1) { wishlist.splice(idx, 1); showToast('Removed from wishlist'); }
-  else { wishlist.push(id); showToast('Added to wishlist!', 'success'); }
+  if (idx > -1) { wishlist.splice(idx, 1); showToast('Removed from wishlist'); } else { wishlist.push(id); showToast('Added to wishlist!', 'success'); }
   saveData(); renderProducts();
 }
 
@@ -1744,37 +1448,7 @@ function showProductDetail(id) {
   const p = products.find(pr => pr.id === id);
   if (!p) return;
   const discount = Math.round((1 - p.price/p.oldPrice) * 100);
-  document.getElementById('productDetailContent').innerHTML = `
-    <div><img class="main-image" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/600x600/cccccc/666666?text=Product'"></div>
-    <div class="detail-info">
-      <div style="font-size: 12px; color: var(--gold); letter-spacing: 2px; margin-bottom: 8px;">${p.category.toUpperCase()}</div>
-      <h1>${p.name}</h1>
-      <div class="detail-price">
-        <span class="current">৳${p.price}</span>
-        <span class="old">৳${p.oldPrice}</span>
-        ${discount > 0 ? `<span style="background: #e74c3c; color: white; padding: 3px 8px; border-radius: 3px; font-size: 12px;">-${discount}%</span>` : ''}
-      </div>
-      <p class="detail-desc">${p.description}</p>
-      <div style="margin-bottom: 15px;">
-        <label style="font-weight: 600; display: block; margin-bottom: 8px; font-size: 13px;">Select Size:</label>
-        <div class="size-options">
-          ${p.sizes.map((s, i) => `<div class="size-btn ${i===1?'active':''}" onclick="this.parentElement.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active')">${s}</div>`).join('')}
-        </div>
-      </div>
-      <div style="margin-bottom: 15px; font-size: 13px;">
-        <strong>Stock:</strong> <span style="color: ${p.stock > 10 ? '#27ae60' : '#e74c3c'}">${p.stock} available</span>
-      </div>
-      <div>
-        <button class="add-to-cart-lg" onclick="addToCart(${p.id}); closePage('productDetailPage')">Add to Cart</button>
-        <button class="wishlist-lg" onclick="toggleWishlist(${p.id})">Wishlist</button>
-      </div>
-      <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--border); display: flex; gap: 15px; font-size: 12px; color: var(--gray); flex-wrap: wrap;">
-        <span>Free Delivery</span>
-        <span>7 Days Return</span>
-        <span>Genuine Product</span>
-      </div>
-    </div>
-  `;
+  document.getElementById('productDetailContent').innerHTML = `<div><img class="main-image" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/600x600/cccccc/666666?text=Product'"></div><div class="detail-info"><div style="font-size: 12px; color: var(--gold); letter-spacing: 2px; margin-bottom: 8px;">${p.category.toUpperCase()}</div><h1>${p.name}</h1><div class="detail-price"><span class="current">৳${p.price}</span><span class="old">৳${p.oldPrice}</span>${discount > 0 ? `<span style="background: #e74c3c; color: white; padding: 3px 8px; border-radius: 3px; font-size: 12px;">-${discount}%</span>` : ''}</div><p class="detail-desc">${p.description}</p><div style="margin-bottom: 15px;"><label style="font-weight: 600; display: block; margin-bottom: 8px; font-size: 13px;">Select Size:</label><div class="size-options">${p.sizes.map((s, i) => `<div class="size-btn ${i===1?'active':''}" onclick="this.parentElement.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active')">${s}</div>`).join('')}</div></div><div style="margin-bottom: 15px; font-size: 13px;"><strong>Stock:</strong> <span style="color: ${p.stock > 10 ? '#27ae60' : '#e74c3c'}">${p.stock} available</span></div><div><button class="add-to-cart-lg" onclick="addToCart(${p.id}); closePage('productDetailPage')">Add to Cart</button><button class="wishlist-lg" onclick="toggleWishlist(${p.id})">Wishlist</button></div><div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--border); display: flex; gap: 15px; font-size: 12px; color: var(--gray); flex-wrap: wrap;"><span>Free Delivery</span><span>7 Days Return</span><span>Genuine Product</span></div></div>`;
   document.getElementById('productDetailPage').classList.add('active');
 }
 
@@ -1784,27 +1458,11 @@ function performSearch() {
   if (!q) { renderProducts(); return; }
   const grid = document.getElementById('productsGrid');
   const filtered = products.filter(p => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
-  if (filtered.length === 0) {
-    grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--gray);">No products found</p>';
-  } else {
+  if (filtered.length === 0) { grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--gray);">No products found</p>'; }
+  else {
     grid.innerHTML = filtered.map(p => {
       const discount = Math.round((1 - p.price/p.oldPrice) * 100);
-      return `
-        <div class="product-card" onclick="showProductDetail(${p.id})">
-          ${discount > 0 ? `<div class="discount-badge">-${discount}%</div>` : ''}
-          <div class="img-wrap">
-            <img src="${p.image}" alt="${p.name}">
-            <button class="add-cart-btn" onclick="event.stopPropagation(); addToCart(${p.id})" style="opacity:1; transform:none;">+</button>
-          </div>
-          <div class="product-info">
-            <div class="product-name">${p.name}</div>
-            <div class="product-price">
-              <span class="price-old">৳${p.oldPrice}</span>
-              <span class="price-current">৳${p.price}</span>
-            </div>
-          </div>
-        </div>
-      `;
+      return `<div class="product-card" onclick="showProductDetail(${p.id})">${discount > 0 ? `<div class="discount-badge">-${discount}%</div>` : ''}<div class="img-wrap"><img src="${p.image}" alt="${p.name}"><button class="add-cart-btn" onclick="event.stopPropagation(); addToCart(${p.id})" style="opacity:1; transform:none;">+</button></div><div class="product-info"><div class="product-name">${p.name}</div><div class="product-price"><span class="price-old">৳${p.oldPrice}</span><span class="price-current">৳${p.price}</span></div></div></div>`;
     }).join('');
   }
   scrollToSection('productsSection');
@@ -1816,9 +1474,7 @@ function handleLogin() {
   if (!email || !password) { showToast('Please fill all fields!', 'error'); return; }
   const user = users.find(u => u.email === email && u.password === password);
   if (!user) { showToast('Invalid credentials!', 'error'); return; }
-  currentUser = user; saveData();
-  closePage('loginPage');
-  updateAccountButton();
+  currentUser = user; saveData(); closePage('loginPage'); updateAccountButton();
   showToast(`Welcome back, ${user.name}!`, 'success');
   if (user.isAdmin) setTimeout(() => showCustomerPage('admin'), 500);
 }
@@ -1831,10 +1487,7 @@ function handleSignup() {
   if (password.length < 6) { showToast('Password must be 6+ characters!', 'error'); return; }
   if (users.find(u => u.email === email)) { showToast('Email already registered!', 'error'); return; }
   const newUser = { email, password, name, isAdmin: false, joinedDate: new Date().toISOString() };
-  users.push(newUser);
-  currentUser = newUser;
-  saveData(); closePage('signupPage');
-  updateAccountButton();
+  users.push(newUser); currentUser = newUser; saveData(); closePage('signupPage'); updateAccountButton();
   showToast('Account created!', 'success');
 }
 
@@ -1876,47 +1529,26 @@ const adminMenuItems = [
 function renderAdminNav() {
   const nav = document.getElementById('adminNav');
   nav.innerHTML = adminMenuItems.map(item => {
-    let html = `<div class="admin-nav-item ${item.id === 'dashboard' ? 'active' : ''}" data-id="${item.id}" onclick="handleAdminNavClick('${item.id}', this)">
-      <span class="icon">${item.icon}</span>
-      <span>${item.label}</span>
-      ${item.hasSubmenu ? '<span class="arrow">›</span>' : ''}
-    </div>`;
-    if (item.hasSubmenu) {
-      html += `<div class="admin-submenu" id="submenu-${item.id}">
-        ${item.submenu.map(s => `<div class="admin-submenu-item" onclick="event.stopPropagation(); showAdminTab('${item.id}')">${s}</div>`).join('')}
-      </div>`;
-    }
+    let html = `<div class="admin-nav-item ${item.id === 'dashboard' ? 'active' : ''}" data-id="${item.id}" onclick="handleAdminNavClick('${item.id}', this)"><span class="icon">${item.icon}</span><span>${item.label}</span>${item.hasSubmenu ? '<span class="arrow">›</span>' : ''}</div>`;
+    if (item.hasSubmenu) { html += `<div class="admin-submenu" id="submenu-${item.id}">${item.submenu.map(s => `<div class="admin-submenu-item" onclick="event.stopPropagation(); showAdminTab('${item.id}')">${s}</div>`).join('')}</div>`; }
     return html;
   }).join('');
 }
 
 function handleAdminNavClick(id, el) {
   const item = adminMenuItems.find(i => i.id === id);
-  if (item && item.hasSubmenu) {
-    el.classList.toggle('expanded');
-    const submenu = document.getElementById('submenu-' + id);
-    submenu.classList.toggle('show');
-  } else {
-    document.querySelectorAll('.admin-nav-item').forEach(n => n.classList.remove('active'));
-    el.classList.add('active');
-    showAdminTab(id);
-  }
+  if (item && item.hasSubmenu) { el.classList.toggle('expanded'); const submenu = document.getElementById('submenu-' + id); submenu.classList.toggle('show'); }
+  else { document.querySelectorAll('.admin-nav-item').forEach(n => n.classList.remove('active')); el.classList.add('active'); showAdminTab(id); }
 }
 
-function toggleAdminSidebar() {
-  document.getElementById('adminSidebar').classList.toggle('open');
-  document.getElementById('sidebarOverlay').classList.toggle('show');
-}
+function toggleAdminSidebar() { document.getElementById('adminSidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('show'); }
 
 let profitChart, donutChart;
 
 function showAdminTab(tab) {
   document.getElementById('adminPageTitle').textContent = tab === 'dashboard' ? 'Overview' : tab.charAt(0).toUpperCase() + tab.slice(1);
-  document.querySelectorAll('.admin-nav-item').forEach(n => {
-    n.classList.toggle('active', n.dataset.id === tab);
-  });
+  document.querySelectorAll('.admin-nav-item').forEach(n => { n.classList.toggle('active', n.dataset.id === tab); });
   const content = document.getElementById('adminContent');
-
   if (tab === 'dashboard') {
     const todayOrders = orders.filter(o => new Date(o.date).toDateString() === new Date().toDateString());
     const pendingOrders = orders.filter(o => o.status === 'pending');
@@ -1924,265 +1556,21 @@ function showAdminTab(tab) {
     const deliveredOrders = orders.filter(o => o.status === 'delivered');
     const cancelledOrders = orders.filter(o => o.status === 'cancelled');
     const sum = arr => arr.reduce((s, o) => s + o.total, 0);
-
-    content.innerHTML = `
-      <div class="filter-bar">
-        <h2>Overview</h2>
-        <div class="filter-buttons">
-          <button class="filter-btn">Filter in Date</button>
-          <button class="filter-btn active">Today</button>
-        </div>
-      </div>
-      <div class="stat-cards">
-        <div class="stat-card blue">
-          <div class="stat-icon">O</div>
-          <div class="stat-label">Today Orders: ${todayOrders.length}</div>
-          <div class="stat-value">৳${sum(todayOrders)}</div>
-        </div>
-        <div class="stat-card pink">
-          <div class="stat-icon">C</div>
-          <div class="stat-label">Today Courier Orders: 0</div>
-          <div class="stat-value">৳0</div>
-        </div>
-        <div class="stat-card green">
-          <div class="stat-icon">✓</div>
-          <div class="stat-label">Confirmed Orders: ${confirmedOrders.length}</div>
-          <div class="stat-value">৳${sum(confirmedOrders)}</div>
-        </div>
-        <div class="stat-card purple">
-          <div class="stat-icon">P</div>
-          <div class="stat-label">Pending Orders: ${pendingOrders.length}</div>
-          <div class="stat-value">৳${sum(pendingOrders)}</div>
-        </div>
-        <div class="stat-card orange">
-          <div class="stat-icon">H</div>
-          <div class="stat-label">Hold Orders: 0</div>
-          <div class="stat-value">৳0</div>
-        </div>
-        <div class="stat-card red">
-          <div class="stat-icon">✕</div>
-          <div class="stat-label">Cancelled Orders: ${cancelledOrders.length}</div>
-          <div class="stat-value">৳${sum(cancelledOrders)}</div>
-          <span class="stat-sub">${orders.length ? Math.round(cancelledOrders.length/orders.length*100) : 0}% Cancel Rate</span>
-        </div>
-        <div class="stat-card violet">
-          <div class="stat-icon">D</div>
-          <div class="stat-label">Delivered Orders: ${deliveredOrders.length}</div>
-          <div class="stat-value">৳${sum(deliveredOrders)}</div>
-        </div>
-        <div class="stat-card darkblue">
-          <div class="stat-icon">R</div>
-          <div class="stat-label">Return Orders: 0</div>
-          <div class="stat-value">৳0</div>
-          <span class="stat-sub">0% Return Rate</span>
-        </div>
-        <div class="stat-card coral">
-          <div class="stat-icon">U</div>
-          <div class="stat-label">Total Customers: ${users.filter(u => !u.isAdmin).length}</div>
-          <div class="stat-value">${users.filter(u => !u.isAdmin).length}</div>
-        </div>
-        <div class="stat-card teal">
-          <div class="stat-icon">M</div>
-          <div class="stat-label">Total Revenue</div>
-          <div class="stat-value">৳${sum(orders)}</div>
-        </div>
-      </div>
-      <button class="see-more-btn">See More ↓</button>
-      <div class="charts-grid">
-        <div class="chart-card">
-          <div class="chart-card-header">
-            <h3>Profit and Sales revenue</h3>
-            <div class="chart-tabs">
-              <button class="chart-tab" onclick="updateChart('monthly', this)">Monthly</button>
-              <button class="chart-tab active" onclick="updateChart('weekly', this)">Last Week</button>
-              <button class="chart-tab" onclick="updateChart('yearly', this)">Yearly</button>
-            </div>
-          </div>
-          <div class="chart-container"><canvas id="profitChart"></canvas></div>
-        </div>
-        <div class="chart-card">
-          <div class="chart-card-header"><h3>Sales by Category</h3></div>
-          <div class="donut-container">
-            <canvas id="donutChart"></canvas>
-            <div class="donut-center-label" id="donutCenterLabel"></div>
-          </div>
-        </div>
-      </div>
-    `;
-    setTimeout(() => {
-      renderProfitChart('weekly');
-      renderDonutChart();
-    }, 100);
+    content.innerHTML = `<div class="filter-bar"><h2>Overview</h2><div class="filter-buttons"><button class="filter-btn">Filter in Date</button><button class="filter-btn active">Today</button></div></div><div class="stat-cards"><div class="stat-card blue"><div class="stat-icon">O</div><div class="stat-label">Today Orders: ${todayOrders.length}</div><div class="stat-value">৳${sum(todayOrders)}</div></div><div class="stat-card pink"><div class="stat-icon">C</div><div class="stat-label">Today Courier Orders: 0</div><div class="stat-value">৳0</div></div><div class="stat-card green"><div class="stat-icon">✓</div><div class="stat-label">Confirmed Orders: ${confirmedOrders.length}</div><div class="stat-value">৳${sum(confirmedOrders)}</div></div><div class="stat-card purple"><div class="stat-icon">P</div><div class="stat-label">Pending Orders: ${pendingOrders.length}</div><div class="stat-value">৳${sum(pendingOrders)}</div></div><div class="stat-card orange"><div class="stat-icon">H</div><div class="stat-label">Hold Orders: 0</div><div class="stat-value">0</div></div><div class="stat-card red"><div class="stat-icon">✕</div><div class="stat-label">Cancelled Orders: ${cancelledOrders.length}</div><div class="stat-value">${sum(cancelledOrders)}</div><span class="stat-sub">${orders.length ? Math.round(cancelledOrders.length/orders.length*100) : 0}% Cancel Rate</span></div><div class="stat-card violet"><div class="stat-icon">D</div><div class="stat-label">Delivered Orders: ${deliveredOrders.length}</div><div class="stat-value">${sum(deliveredOrders)}</div></div><div class="stat-card darkblue"><div class="stat-icon">R</div><div class="stat-label">Return Orders: 0</div><div class="stat-value">৳0</div><span class="stat-sub">0% Return Rate</span></div><div class="stat-card coral"><div class="stat-icon">U</div><div class="stat-label">Total Customers: ${users.filter(u => !u.isAdmin).length}</div><div class="stat-value">${users.filter(u => !u.isAdmin).length}</div></div><div class="stat-card teal"><div class="stat-icon">M</div><div class="stat-label">Total Revenue</div><div class="stat-value">৳${sum(orders)}</div></div></div><button class="see-more-btn">See More ↓</button><div class="charts-grid"><div class="chart-card"><div class="chart-card-header"><h3>Profit and Sales revenue</h3><div class="chart-tabs"><button class="chart-tab" onclick="updateChart('monthly', this)">Monthly</button><button class="chart-tab active" onclick="updateChart('weekly', this)">Last Week</button><button class="chart-tab" onclick="updateChart('yearly', this)">Yearly</button></div></div><div class="chart-container"><canvas id="profitChart"></canvas></div></div><div class="chart-card"><div class="chart-card-header"><h3>Sales by Category</h3></div><div class="donut-container"><canvas id="donutChart"></canvas><div class="donut-center-label" id="donutCenterLabel"></div></div></div></div>`;
+    setTimeout(() => { renderProfitChart('weekly'); renderDonutChart(); }, 100);
   } else if (tab === 'products') {
-    content.innerHTML = `
-      <div class="filter-bar">
-        <h2>Products Management</h2>
-        <button class="btn btn-primary" onclick="openProductForm()">+ Add Product</button>
-      </div>
-      <div class="admin-table-wrap">
-        <table class="admin-table">
-          <thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th></tr></thead>
-          <tbody>
-            ${products.map(p => `
-              <tr>
-                <td><img class="product-thumb" src="${p.image}" onerror="this.src='https://via.placeholder.com/50'"></td>
-                <td>${p.name}</td>
-                <td>${p.category}</td>
-                <td>৳${p.price}</td>
-                <td>${p.stock}</td>
-                <td>
-                  <button class="btn btn-primary btn-sm" onclick="openProductForm(${p.id})">Edit</button>
-                  <button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id})">Delete</button>
-                </td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
-    `;
+    content.innerHTML = `<div class="filter-bar"><h2>Products Management</h2><button class="btn btn-primary" onclick="openProductForm()">+ Add Product</button></div><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th></tr></thead><tbody>${products.map(p => `<tr><td><img class="product-thumb" src="${p.image}" onerror="this.src='https://via.placeholder.com/50'"></td><td>${p.name}</td><td>${p.category}</td><td>৳${p.price}</td><td>${p.stock}</td><td><button class="btn btn-primary btn-sm" onclick="openProductForm(${p.id})">Edit</button><button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id})">Delete</button></td></tr>`).join('')}</tbody></table></div>`;
   } else if (tab === 'orders') {
-    content.innerHTML = `
-      <div class="filter-bar"><h2>Orders</h2></div>
-      <div class="admin-table-wrap">
-        <table class="admin-table">
-          <thead><tr><th>Order ID</th><th>Customer</th><th>Phone</th><th>Items</th><th>Total</th><th>Payment</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
-          <tbody>
-            ${orders.length === 0 ? '<tr><td colspan="9" style="text-align: center; padding: 40px; color: var(--gray);">No orders yet</td></tr>' :
-            orders.slice().reverse().map(o => `
-              <tr>
-                <td><strong>#${o.id}</strong><br><button class="btn btn-sm" style="background: #f0edff; color: var(--primary); margin-top: 4px;" onclick="viewOrderDetails(${o.id})">View Details</button></td>
-                <td>${o.checkoutInfo ? o.checkoutInfo.name : o.user}<br><small style="color: var(--gray);">${o.user}</small></td>
-                <td>${o.checkoutInfo ? o.checkoutInfo.phone : 'N/A'}<br><small style="color: var(--gray);">${o.checkoutInfo ? o.checkoutInfo.city : ''}</small></td>
-                <td>${o.items.length} items</td>
-                <td><strong>৳${o.total}</strong></td>
-                <td>${o.checkoutInfo ? o.checkoutInfo.payment : 'N/A'}</td>
-                <td>${new Date(o.date).toLocaleDateString()}<br><small style="color: var(--gray);">${new Date(o.date).toLocaleTimeString()}</small></td>
-                <td><span style="background: ${o.status==='delivered'?'#27ae60':o.status==='cancelled'?'#e74c3c':o.status==='confirmed'?'#3498db':'#f39c12'}; color: white; padding: 3px 10px; border-radius: 10px; font-size: 11px;">${o.status}</span></td>
-                <td>
-                  <select onchange="updateOrderStatus(${o.id}, this.value)" style="padding: 5px; border-radius: 4px; border: 1px solid var(--border); font-size: 12px;">
-                    <option value="pending" ${o.status==='pending'?'selected':''}>Pending</option>
-                    <option value="confirmed" ${o.status==='confirmed'?'selected':''}>Confirmed</option>
-                    <option value="delivered" ${o.status==='delivered'?'selected':''}>Delivered</option>
-                    <option value="cancelled" ${o.status==='cancelled'?'selected':''}>Cancelled</option>
-                  </select>
-                </td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
-    `;
+    content.innerHTML = `<div class="filter-bar"><h2>Orders</h2></div><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Order ID</th><th>Customer</th><th>Phone</th><th>Items</th><th>Total</th><th>Payment</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>${orders.length === 0 ? '<tr><td colspan="9" style="text-align: center; padding: 40px; color: var(--gray);">No orders yet</td></tr>' : orders.slice().reverse().map(o => `<tr><td><strong>#${o.id}</strong><br><button class="btn btn-sm" style="background: #f0edff; color: var(--primary); margin-top: 4px;" onclick="viewOrderDetails(${o.id})">View Details</button></td><td>${o.checkoutInfo ? o.checkoutInfo.name : o.user}<br><small style="color: var(--gray);">${o.user}</small></td><td>${o.checkoutInfo ? o.checkoutInfo.phone : 'N/A'}<br><small style="color: var(--gray);">${o.checkoutInfo ? o.checkoutInfo.city : ''}</small></td><td>${o.items.length} items</td><td><strong>${o.total}</strong></td><td>${o.checkoutInfo ? o.checkoutInfo.payment : 'N/A'}</td><td>${new Date(o.date).toLocaleDateString()}<br><small style="color: var(--gray);">${new Date(o.date).toLocaleTimeString()}</small></td><td><span style="background: ${o.status==='delivered'?'#27ae60':o.status==='cancelled'?'#e74c3c':o.status==='confirmed'?'#3498db':'#f39c12'}; color: white; padding: 3px 10px; border-radius: 10px; font-size: 11px;">${o.status}</span></td><td><select onchange="updateOrderStatus(${o.id}, this.value)" style="padding: 5px; border-radius: 4px; border: 1px solid var(--border); font-size: 12px;"><option value="pending" ${o.status==='pending'?'selected':''}>Pending</option><option value="confirmed" ${o.status==='confirmed'?'selected':''}>Confirmed</option><option value="delivered" ${o.status==='delivered'?'selected':''}>Delivered</option><option value="cancelled" ${o.status==='cancelled'?'selected':''}>Cancelled</option></select></td></tr>`).join('')}</tbody></table></div>`;
   } else if (tab === 'customer') {
     const customers = users.filter(u => !u.isAdmin);
-    content.innerHTML = `
-      <div class="filter-bar">
-        <h2>Customers List (${customers.length})</h2>
-        <div class="filter-buttons">
-          <button class="filter-btn active">All Customers</button>
-          <button class="filter-btn">Active</button>
-          <button class="filter-btn">Blocked</button>
-        </div>
-      </div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 25px;">
-        <div style="background: var(--white); padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-          <div style="font-size: 11px; color: var(--gray); margin-bottom: 6px;">TOTAL CUSTOMERS</div>
-          <div style="font-size: 28px; font-weight: 900; color: var(--primary);">${customers.length}</div>
-        </div>
-        <div style="background: var(--white); padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-          <div style="font-size: 11px; color: var(--gray); margin-bottom: 6px;">TOTAL ORDERS</div>
-          <div style="font-size: 28px; font-weight: 900; color: var(--teal);">${orders.length}</div>
-        </div>
-        <div style="background: var(--white); padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-          <div style="font-size: 11px; color: var(--gray); margin-bottom: 6px;">TOTAL REVENUE</div>
-          <div style="font-size: 28px; font-weight: 900; color: #27ae60;">৳${orders.reduce((s,o)=>s+o.total,0)}</div>
-        </div>
-      </div>
-      <div class="admin-table-wrap">
-        <table class="admin-table">
-          <thead><tr><th>Customer</th><th>Email / Phone</th><th>Joined</th><th>Total Orders</th><th>Total Spent</th><th>Actions</th></tr></thead>
-          <tbody>
-            ${customers.length === 0 ? '<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--gray);">No customers registered yet</td></tr>' :
-            customers.map((u, idx) => {
-              const userOrders = orders.filter(o => o.user === u.email);
-              const totalSpent = userOrders.reduce((s, o) => s + o.total, 0);
-              return `
-                <tr>
-                  <td>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                      <div style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #a29bfe); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">${u.name.charAt(0).toUpperCase()}</div>
-                      <div>
-                        <div style="font-weight: 600;">${u.name}</div>
-                        <div style="font-size: 11px; color: var(--gray);">#${idx + 1}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>${u.email}</td>
-                  <td>${u.joinedDate ? new Date(u.joinedDate).toLocaleDateString() : 'N/A'}</td>
-                  <td><strong>${userOrders.length}</strong></td>
-                  <td><strong style="color: var(--teal);">৳${totalSpent}</strong></td>
-                  <td>
-                    <button class="btn btn-primary btn-sm" onclick="viewCustomerDetails('${u.email}')">View</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteCustomer('${u.email}')">Delete</button>
-                  </td>
-                </tr>
-              `;
-            }).join('')}
-          </tbody>
-        </table>
-      </div>
-    `;
+    content.innerHTML = `<div class="filter-bar"><h2>Customers List (${customers.length})</h2><div class="filter-buttons"><button class="filter-btn active">All Customers</button><button class="filter-btn">Active</button><button class="filter-btn">Blocked</button></div></div><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 25px;"><div style="background: var(--white); padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);"><div style="font-size: 11px; color: var(--gray); margin-bottom: 6px;">TOTAL CUSTOMERS</div><div style="font-size: 28px; font-weight: 900; color: var(--primary);">${customers.length}</div></div><div style="background: var(--white); padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);"><div style="font-size: 11px; color: var(--gray); margin-bottom: 6px;">TOTAL ORDERS</div><div style="font-size: 28px; font-weight: 900; color: var(--teal);">${orders.length}</div></div><div style="background: var(--white); padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);"><div style="font-size: 11px; color: var(--gray); margin-bottom: 6px;">TOTAL REVENUE</div><div style="font-size: 28px; font-weight: 900; color: #27ae60;">${orders.reduce((s,o)=>s+o.total,0)}</div></div></div><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Customer</th><th>Email / Phone</th><th>Joined</th><th>Total Orders</th><th>Total Spent</th><th>Actions</th></tr></thead><tbody>${customers.length === 0 ? '<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--gray);">No customers registered yet</td></tr>' : customers.map((u, idx) => { const userOrders = orders.filter(o => o.user === u.email); const totalSpent = userOrders.reduce((s, o) => s + o.total, 0); return `<tr><td><div style="display: flex; align-items: center; gap: 10px;"><div style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #a29bfe); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">${u.name.charAt(0).toUpperCase()}</div><div><div style="font-weight: 600;">${u.name}</div><div style="font-size: 11px; color: var(--gray);">#${idx + 1}</div></div></div></td><td>${u.email}</td><td>${u.joinedDate ? new Date(u.joinedDate).toLocaleDateString() : 'N/A'}</td><td><strong>${userOrders.length}</strong></td><td><strong style="color: var(--teal);">৳${totalSpent}</strong></td><td><button class="btn btn-primary btn-sm" onclick="viewCustomerDetails('${u.email}')">View</button><button class="btn btn-danger btn-sm" onclick="deleteCustomer('${u.email}')">Delete</button></td></tr>`; }).join('')}</tbody></table></div>`;
   } else if (tab === 'catalog') {
-    content.innerHTML = `
-      <div class="filter-bar">
-        <h2>Categories</h2>
-        <button class="btn btn-primary" onclick="openCategoryForm()">+ Add Category</button>
-      </div>
-      <div class="admin-table-wrap">
-        <table class="admin-table">
-          <thead><tr><th>Image</th><th>Name</th><th>Products</th><th>Actions</th></tr></thead>
-          <tbody>
-            ${categories.map(c => `
-              <tr>
-                <td><img class="product-thumb" src="${c.image}" onerror="this.src='https://via.placeholder.com/50'"></td>
-                <td>${c.name}</td>
-                <td>${c.count}</td>
-                <td>
-                  <button class="btn btn-primary btn-sm" onclick="openCategoryForm(${c.id})">Edit</button>
-                  <button class="btn btn-danger btn-sm" onclick="deleteCategory(${c.id})">Delete</button>
-                </td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
-    `;
+    content.innerHTML = `<div class="filter-bar"><h2>Categories</h2><button class="btn btn-primary" onclick="openCategoryForm()">+ Add Category</button></div><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Image</th><th>Name</th><th>Products</th><th>Actions</th></tr></thead><tbody>${categories.map(c => `<tr><td><img class="product-thumb" src="${c.image}" onerror="this.src='https://via.placeholder.com/50'"></td><td>${c.name}</td><td>${c.count}</td><td><button class="btn btn-primary btn-sm" onclick="openCategoryForm(${c.id})">Edit</button><button class="btn btn-danger btn-sm" onclick="deleteCategory(${c.id})">Delete</button></td></tr>`).join('')}</tbody></table></div>`;
   } else if (tab === 'settings') {
-    content.innerHTML = `
-      <div class="filter-bar"><h2>Settings</h2></div>
-      <div style="background: var(--white); padding: 25px; border-radius: 12px; max-width: 600px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-        <h3 style="margin-bottom: 20px; font-size: 18px;">Store Information</h3>
-        <div class="form-group"><label>Store Name</label><input type="text" id="setStoreName" value="${settings.storeName}"></div>
-        <div class="form-group"><label>Contact Email</label><input type="email" id="setEmail" value="${settings.email}"></div>
-        <div class="form-group"><label>Phone</label><input type="text" id="setPhone" value="${settings.phone}"></div>
-        <div class="form-group"><label>Address</label><input type="text" id="setAddress" value="${settings.address}"></div>
-        <hr style="margin: 25px 0; border: none; border-top: 1px solid var(--border);">
-        <h3 style="margin-bottom: 20px; font-size: 18px;">Social Media Links</h3>
-        <div class="form-group"><label>Facebook Page URL</label><input type="url" id="setFacebook" value="${settings.facebook}" placeholder="https://facebook.com/..."></div>
-        <div class="form-group"><label>YouTube Channel URL</label><input type="url" id="setYoutube" value="${settings.youtube}" placeholder="https://youtube.com/..."></div>
-        <button class="btn btn-primary" style="padding: 12px 24px; font-size: 14px;" onclick="saveSettings()">Save Changes</button>
-        <hr style="margin: 25px 0; border: none; border-top: 1px solid var(--border);">
-        <h3 style="margin-bottom: 15px; font-size: 18px; color: #e74c3c;">Danger Zone</h3>
-        <button class="btn btn-danger" onclick="if(confirm('Reset ALL data?')) { localStorage.clear(); location.reload(); }">Reset All Data</button>
-      </div>
-    `;
+    content.innerHTML = `<div class="filter-bar"><h2>Settings</h2></div><div style="background: var(--white); padding: 25px; border-radius: 12px; max-width: 600px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);"><h3 style="margin-bottom: 20px; font-size: 18px;">Store Information</h3><div class="form-group"><label>Store Name</label><input type="text" id="setStoreName" value="${settings.storeName}"></div><div class="form-group"><label>Contact Email</label><input type="email" id="setEmail" value="${settings.email}"></div><div class="form-group"><label>Phone</label><input type="text" id="setPhone" value="${settings.phone}"></div><div class="form-group"><label>Address</label><input type="text" id="setAddress" value="${settings.address}"></div><hr style="margin: 25px 0; border: none; border-top: 1px solid var(--border);"><h3 style="margin-bottom: 20px; font-size: 18px;">Social Media Links</h3><div class="form-group"><label>Facebook Page URL</label><input type="url" id="setFacebook" value="${settings.facebook}" placeholder="https://facebook.com/..."></div><div class="form-group"><label>YouTube Channel URL</label><input type="url" id="setYoutube" value="${settings.youtube}" placeholder="https://youtube.com/..."></div><button class="btn btn-primary" style="padding: 12px 24px; font-size: 14px;" onclick="saveSettings()">Save Changes</button><hr style="margin: 25px 0; border: none; border-top: 1px solid var(--border);"><h3 style="margin-bottom: 15px; font-size: 18px; color: #e74c3c;">Danger Zone</h3><button class="btn btn-danger" onclick="if(confirm('Reset ALL data?')) { localStorage.clear(); location.reload(); }">Reset All Data</button></div>`;
   } else {
-    content.innerHTML = `
-      <div class="filter-bar"><h2>${tab.charAt(0).toUpperCase() + tab.slice(1)}</h2></div>
-      <div style="background: var(--white); padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-        <h3 style="margin-bottom: 10px;">Coming Soon</h3>
-        <p style="color: var(--gray); font-size: 14px;">This feature is under development.</p>
-      </div>
-    `;
+    content.innerHTML = `<div class="filter-bar"><h2>${tab.charAt(0).toUpperCase() + tab.slice(1)}</h2></div><div style="background: var(--white); padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05);"><h3 style="margin-bottom: 10px;">Coming Soon</h3><p style="color: var(--gray); font-size: 14px;">This feature is under development.</p></div>`;
   }
 }
 
@@ -2191,304 +1579,70 @@ function viewCustomerDetails(email) {
   if (!user) return;
   const userOrders = orders.filter(o => o.user === email);
   const totalSpent = userOrders.reduce((s, o) => s + o.total, 0);
-  document.getElementById('adminModalContent').innerHTML = `
-    <h2>Customer Details</h2>
-    <div style="text-align: center; margin-bottom: 20px;">
-      <div style="width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #a29bfe); color: white; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 28px; margin: 0 auto 12px;">${user.name.charAt(0).toUpperCase()}</div>
-      <h3 style="font-size: 18px;">${user.name}</h3>
-      <p style="color: var(--gray); font-size: 13px;">${user.email}</p>
-    </div>
-    <div class="customer-detail-card">
-      <div class="detail-row"><span class="label">Email / Phone</span><span class="value">${user.email}</span></div>
-      <div class="detail-row"><span class="label">Member Since</span><span class="value">${user.joinedDate ? new Date(user.joinedDate).toLocaleDateString() : 'N/A'}</span></div>
-      <div class="detail-row"><span class="label">Total Orders</span><span class="value">${userOrders.length}</span></div>
-      <div class="detail-row"><span class="label">Total Spent</span><span class="value" style="color: var(--teal);">৳${totalSpent}</span></div>
-      <div class="detail-row"><span class="label">Account Type</span><span class="value">${user.isAdmin ? 'Admin' : 'Customer'}</span></div>
-    </div>
-    <h3 style="font-size: 14px; margin-bottom: 10px;">Recent Orders</h3>
-    ${userOrders.length === 0 ? '<p style="color: var(--gray); font-size: 13px; text-align: center; padding: 20px;">No orders yet</p>' :
-    userOrders.slice(-5).reverse().map(o => `
-      <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 12px;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-          <strong>#${o.id}</strong>
-          <span style="color: var(--teal); font-weight: 700;">৳${o.total}</span>
-        </div>
-        <div style="color: var(--gray);">${new Date(o.date).toLocaleDateString()} • ${o.items.length} items • 
-          <span style="color: ${o.status==='delivered'?'#27ae60':o.status==='cancelled'?'#e74c3c':'#f39c12'};">${o.status}</span>
-        </div>
-      </div>
-    `).join('')}
-    <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
-      <button class="btn" onclick="closeAdminModal()" style="background: var(--border);">Close</button>
-    </div>
-  `;
+  document.getElementById('adminModalContent').innerHTML = `<h2>Customer Details</h2><div style="text-align: center; margin-bottom: 20px;"><div style="width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #a29bfe); color: white; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 28px; margin: 0 auto 12px;">${user.name.charAt(0).toUpperCase()}</div><h3 style="font-size: 18px;">${user.name}</h3><p style="color: var(--gray); font-size: 13px;">${user.email}</p></div><div class="customer-detail-card"><div class="detail-row"><span class="label">Email / Phone</span><span class="value">${user.email}</span></div><div class="detail-row"><span class="label">Member Since</span><span class="value">${user.joinedDate ? new Date(user.joinedDate).toLocaleDateString() : 'N/A'}</span></div><div class="detail-row"><span class="label">Total Orders</span><span class="value">${userOrders.length}</span></div><div class="detail-row"><span class="label">Total Spent</span><span class="value" style="color: var(--teal);">৳${totalSpent}</span></div><div class="detail-row"><span class="label">Account Type</span><span class="value">${user.isAdmin ? 'Admin' : 'Customer'}</span></div></div><h3 style="font-size: 14px; margin-bottom: 10px;">Recent Orders</h3>${userOrders.length === 0 ? '<p style="color: var(--gray); font-size: 13px; text-align: center; padding: 20px;">No orders yet</p>' : userOrders.slice(-5).reverse().map(o => `<div style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 12px;"><div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><strong>#${o.id}</strong><span style="color: var(--teal); font-weight: 700;">৳${o.total}</span></div><div style="color: var(--gray);">${new Date(o.date).toLocaleDateString()} • ${o.items.length} items • <span style="color: ${o.status==='delivered'?'#27ae60':o.status==='cancelled'?'#e74c3c':'#f39c12'};">${o.status}</span></div></div>`).join('')}<div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;"><button class="btn" onclick="closeAdminModal()" style="background: var(--border);">Close</button></div>`;
   document.getElementById('adminModal').classList.add('active');
 }
 
 function viewOrderDetails(orderId) {
   const order = orders.find(o => o.id === orderId);
   if (!order) return;
-  document.getElementById('adminModalContent').innerHTML = `
-    <h2>Order Details #${order.id}</h2>
-    <div class="customer-detail-card">
-      <div class="detail-row"><span class="label">Order Date</span><span class="value">${new Date(order.date).toLocaleString()}</span></div>
-      <div class="detail-row"><span class="label">Status</span><span class="value" style="color: ${order.status==='delivered'?'#27ae60':order.status==='cancelled'?'#e74c3c':'#f39c12'};">${order.status.toUpperCase()}</span></div>
-      <div class="detail-row"><span class="label">Customer Email</span><span class="value">${order.user}</span></div>
-    </div>
-    ${order.checkoutInfo ? `
-    <h3 style="font-size: 14px; margin: 15px 0 10px;">Shipping Information</h3>
-    <div class="customer-detail-card">
-      <div class="detail-row"><span class="label">Name</span><span class="value">${order.checkoutInfo.name}</span></div>
-      <div class="detail-row"><span class="label">Phone</span><span class="value">${order.checkoutInfo.phone}</span></div>
-      <div class="detail-row"><span class="label">Email</span><span class="value">${order.checkoutInfo.email || 'N/A'}</span></div>
-      <div class="detail-row"><span class="label">Address</span><span class="value">${order.checkoutInfo.address}</span></div>
-      <div class="detail-row"><span class="label">City</span><span class="value">${order.checkoutInfo.city}</span></div>
-      ${order.checkoutInfo.zip ? `<div class="detail-row"><span class="label">Postal Code</span><span class="value">${order.checkoutInfo.zip}</span></div>` : ''}
-      <div class="detail-row"><span class="label">Payment</span><span class="value">${order.checkoutInfo.payment}</span></div>
-      ${order.checkoutInfo.notes ? `<div class="detail-row"><span class="label">Notes</span><span class="value">${order.checkoutInfo.notes}</span></div>` : ''}
-    </div>` : ''}
-    <h3 style="font-size: 14px; margin: 15px 0 10px;">Order Items</h3>
-    <div style="background: #f8f9fa; border-radius: 8px; padding: 12px;">
-      ${order.items.map(item => {
-        const p = products.find(pr => pr.id === item.id);
-        return p ? `<div style="display: flex; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--border);">
-          <img src="${p.image}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
-          <div style="flex: 1; font-size: 13px;">${p.name}<br><small style="color: var(--gray);">Qty: ${item.qty || 1} × ৳${p.price}</small></div>
-          <div style="font-weight: 700; font-size: 13px;">৳${p.price * (item.qty || 1)}</div>
-        </div>` : '';
-      }).join('')}
-      <div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px; border-top: 1px solid var(--border); margin-top: 8px;">
-        <span>Subtotal</span><span>৳${order.subtotal || order.total}</span>
-      </div>
-      ${order.deliveryCharge ? `<div style="display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px;">
-        <span>Delivery</span><span>৳${order.deliveryCharge}</span>
-      </div>` : ''}
-      <div style="display: flex; justify-content: space-between; padding: 10px 0; font-size: 16px; font-weight: 900; color: var(--teal); border-top: 1px solid var(--border); margin-top: 8px;">
-        <span>Total</span><span>৳${order.total}</span>
-      </div>
-    </div>
-    <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
-      <button class="btn" onclick="closeAdminModal()" style="background: var(--border);">Close</button>
-    </div>
-  `;
+  document.getElementById('adminModalContent').innerHTML = `<h2>Order Details #${order.id}</h2><div class="customer-detail-card"><div class="detail-row"><span class="label">Order Date</span><span class="value">${new Date(order.date).toLocaleString()}</span></div><div class="detail-row"><span class="label">Status</span><span class="value" style="color: ${order.status==='delivered'?'#27ae60':order.status==='cancelled'?'#e74c3c':'#f39c12'};">${order.status.toUpperCase()}</span></div><div class="detail-row"><span class="label">Customer Email</span><span class="value">${order.user}</span></div></div>${order.checkoutInfo ? `<h3 style="font-size: 14px; margin: 15px 0 10px;">Shipping Information</h3><div class="customer-detail-card"><div class="detail-row"><span class="label">Name</span><span class="value">${order.checkoutInfo.name}</span></div><div class="detail-row"><span class="label">Phone</span><span class="value">${order.checkoutInfo.phone}</span></div><div class="detail-row"><span class="label">Email</span><span class="value">${order.checkoutInfo.email || 'N/A'}</span></div><div class="detail-row"><span class="label">Address</span><span class="value">${order.checkoutInfo.address}</span></div><div class="detail-row"><span class="label">City</span><span class="value">${order.checkoutInfo.city}</span></div>${order.checkoutInfo.zip ? `<div class="detail-row"><span class="label">Postal Code</span><span class="value">${order.checkoutInfo.zip}</span></div>` : ''}<div class="detail-row"><span class="label">Payment</span><span class="value">${order.checkoutInfo.payment}</span></div>${order.checkoutInfo.notes ? `<div class="detail-row"><span class="label">Notes</span><span class="value">${order.checkoutInfo.notes}</span></div>` : ''}</div>` : ''}<h3 style="font-size: 14px; margin: 15px 0 10px;">Order Items</h3><div style="background: #f8f9fa; border-radius: 8px; padding: 12px;">${order.items.map(item => { const p = products.find(pr => pr.id === item.id); return p ? `<div style="display: flex; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--border);"><img src="${p.image}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;"><div style="flex: 1; font-size: 13px;">${p.name}<br><small style="color: var(--gray);">Qty: ${item.qty || 1} × ৳${p.price}</small></div><div style="font-weight: 700; font-size: 13px;">৳${p.price * (item.qty || 1)}</div></div>` : ''; }).join('')}<div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px; border-top: 1px solid var(--border); margin-top: 8px;"><span>Subtotal</span><span>৳${order.subtotal || order.total}</span></div>${order.deliveryCharge ? `<div style="display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px;"><span>Delivery</span><span>৳${order.deliveryCharge}</span></div>` : ''}<div style="display: flex; justify-content: space-between; padding: 10px 0; font-size: 16px; font-weight: 900; color: var(--teal); border-top: 1px solid var(--border); margin-top: 8px;"><span>Total</span><span>৳${order.total}</span></div></div><div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;"><button class="btn" onclick="closeAdminModal()" style="background: var(--border);">Close</button></div>`;
   document.getElementById('adminModal').classList.add('active');
 }
 
-function deleteCustomer(email) {
-  if (!confirm('Delete this customer? This will also delete their orders.')) return;
-  users = users.filter(u => u.email !== email);
-  orders = orders.filter(o => o.user !== email);
-  saveData();
-  showAdminTab('customer');
-  showToast('Customer deleted!', 'success');
-}
+function deleteCustomer(email) { if (!confirm('Delete this customer? This will also delete their orders.')) return; users = users.filter(u => u.email !== email); orders = orders.filter(o => o.user !== email); saveData(); showAdminTab('customer'); showToast('Customer deleted!', 'success'); }
 
 function renderProfitChart(period) {
-  const ctx = document.getElementById('profitChart');
-  if (!ctx) return;
-  if (profitChart) profitChart.destroy();
+  const ctx = document.getElementById('profitChart'); if (!ctx) return; if (profitChart) profitChart.destroy();
   const labels = period === 'weekly' ? ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] : period === 'monthly' ? ['Week 1','Week 2','Week 3','Week 4'] : ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const data = period === 'weekly' ? [0,0,0,8500,0,0,0] : period === 'monthly' ? [2000,3500,5000,4200] : [1000,2000,1500,3000,2500,4000,3500,5000,4500,6000,5500,7000];
-  profitChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: 'Revenue',
-        data: data,
-        backgroundColor: 'rgba(108, 92, 231, 0.6)',
-        borderColor: '#6c5ce7',
-        borderWidth: 2,
-        borderRadius: 8
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        y: { beginAtZero: true, grid: { color: '#f0f0f0' } },
-        x: { grid: { display: false } }
-      }
-    }
-  });
+  profitChart = new Chart(ctx, { type: 'bar', data: { labels: labels, datasets: [{ label: 'Revenue', data: data, backgroundColor: 'rgba(108, 92, 231, 0.6)', borderColor: '#6c5ce7', borderWidth: 2, borderRadius: 8 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#f0f0f0' } }, x: { grid: { display: false } } } } });
 }
 
 function renderDonutChart() {
-  const ctx = document.getElementById('donutChart');
-  if (!ctx) return;
-  if (donutChart) donutChart.destroy();
+  const ctx = document.getElementById('donutChart'); if (!ctx) return; if (donutChart) donutChart.destroy();
   const catData = categories.map(c => ({ name: c.name, count: products.filter(p => p.category === c.name.toLowerCase()).length }));
-  donutChart = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      labels: catData.map(c => c.name),
-      datasets: [{
-        data: catData.map(c => c.count || 1),
-        backgroundColor: ['#4facfe','#f093fb','#43e97b','#667eea','#fa709a'],
-        borderWidth: 0
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      cutout: '65%',
-      plugins: {
-        legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 10 } }
-      }
-    }
-  });
-  const label = document.getElementById('donutCenterLabel');
-  if (label) label.innerHTML = `<span class="num">${products.length}</span><span class="lbl">Total Products</span>`;
+  donutChart = new Chart(ctx, { type: 'doughnut', data: { labels: catData.map(c => c.name), datasets: [{ data: catData.map(c => c.count || 1), backgroundColor: ['#4facfe','#f093fb','#43e97b','#667eea','#fa709a'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 10 } } } } });
+  const label = document.getElementById('donutCenterLabel'); if (label) label.innerHTML = `<span class="num">${products.length}</span><span class="lbl">Total Products</span>`;
 }
 
-function updateChart(period, el) {
-  document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  renderProfitChart(period);
-}
+function updateChart(period, el) { document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); renderProfitChart(period); }
 
 function openProductForm(id) {
   const p = id ? products.find(pr => pr.id === id) : { name: '', category: categories[0]?.name.toLowerCase() || 'shorts', price: 0, oldPrice: 0, image: '', description: '', sizes: ['S','M','L','XL'], stock: 0 };
-  document.getElementById('adminModalContent').innerHTML = `
-    <h2>${id ? 'Edit' : 'Add'} Product</h2>
-    <div class="image-upload" onclick="document.getElementById('prodImgInput').click()">
-      ${p.image ? `<img src="${p.image}" id="prodImgPreview">` : '<p>Click to select an image</p>'}
-      <p>Click to upload image</p>
-      <input type="file" id="prodImgInput" accept="image/*" style="display: none;" onchange="previewImage(this, 'prodImgPreview')">
-    </div>
-    <div class="form-group"><label>Product Name *</label><input type="text" id="prodName" value="${p.name}"></div>
-    <div class="form-row">
-      <div class="form-group"><label>Category *</label>
-        <select id="prodCategory">
-          ${categories.map(c => `<option value="${c.name.toLowerCase()}" ${p.category === c.name.toLowerCase() ? 'selected' : ''}>${c.name}</option>`).join('')}
-        </select>
-      </div>
-      <div class="form-group"><label>Stock *</label><input type="number" id="prodStock" value="${p.stock}"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label>Price (৳) *</label><input type="number" id="prodPrice" value="${p.price}"></div>
-      <div class="form-group"><label>Old Price (৳)</label><input type="number" id="prodOldPrice" value="${p.oldPrice}"></div>
-    </div>
-    <div class="form-group"><label>Sizes (comma separated)</label><input type="text" id="prodSizes" value="${p.sizes.join(',')}"></div>
-    <div class="form-group"><label>Description</label><textarea id="prodDesc" rows="3">${p.description}</textarea></div>
-    <div style="display: flex; gap: 10px; justify-content: flex-end;">
-      <button class="btn" onclick="closeAdminModal()" style="background: var(--border);">Cancel</button>
-      <button class="btn btn-primary" onclick="saveProduct(${id || 'null'})">Save</button>
-    </div>
-  `;
+  document.getElementById('adminModalContent').innerHTML = `<h2>${id ? 'Edit' : 'Add'} Product</h2><div class="image-upload" onclick="document.getElementById('prodImgInput').click()">${p.image ? `<img src="${p.image}" id="prodImgPreview">` : '<p>Click to select an image</p>'}<p>Click to upload image</p><input type="file" id="prodImgInput" accept="image/*" style="display: none;" onchange="previewImage(this, 'prodImgPreview')"></div><div class="form-group"><label>Product Name *</label><input type="text" id="prodName" value="${p.name}"></div><div class="form-row"><div class="form-group"><label>Category *</label><select id="prodCategory">${categories.map(c => `<option value="${c.name.toLowerCase()}" ${p.category === c.name.toLowerCase() ? 'selected' : ''}>${c.name}</option>`).join('')}</select></div><div class="form-group"><label>Stock *</label><input type="number" id="prodStock" value="${p.stock}"></div></div><div class="form-row"><div class="form-group"><label>Price (৳) *</label><input type="number" id="prodPrice" value="${p.price}"></div><div class="form-group"><label>Old Price (৳)</label><input type="number" id="prodOldPrice" value="${p.oldPrice}"></div></div><div class="form-group"><label>Sizes (comma separated)</label><input type="text" id="prodSizes" value="${p.sizes.join(',')}"></div><div class="form-group"><label>Description</label><textarea id="prodDesc" rows="3">${p.description}</textarea></div><div style="display: flex; gap: 10px; justify-content: flex-end;"><button class="btn" onclick="closeAdminModal()" style="background: var(--border);">Cancel</button><button class="btn btn-primary" onclick="saveProduct(${id || 'null'})">Save</button></div>`;
   document.getElementById('adminModal').classList.add('active');
 }
 
-function previewImage(input, previewId) {
-  const file = input.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = e => {
-      let img = document.getElementById(previewId);
-      if (!img) {
-        img = document.createElement('img');
-        img.id = previewId;
-        input.parentElement.insertBefore(img, input);
-      }
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  }
-}
+function previewImage(input, previewId) { const file = input.files[0]; if (file) { const reader = new FileReader(); reader.onload = e => { let img = document.getElementById(previewId); if (!img) { img = document.createElement('img'); img.id = previewId; input.parentElement.insertBefore(img, input); } img.src = e.target.result; }; reader.readAsDataURL(file); } }
 
 function saveProduct(id) {
-  const name = document.getElementById('prodName').value.trim();
-  const category = document.getElementById('prodCategory').value;
-  const price = parseFloat(document.getElementById('prodPrice').value);
-  const oldPrice = parseFloat(document.getElementById('prodOldPrice').value) || price;
-  const stock = parseInt(document.getElementById('prodStock').value) || 0;
-  const description = document.getElementById('prodDesc').value.trim();
-  const sizes = document.getElementById('prodSizes').value.split(',').map(s => s.trim()).filter(s => s);
-  const imgPreview = document.getElementById('prodImgPreview');
-  const image = imgPreview ? imgPreview.src : '';
+  const name = document.getElementById('prodName').value.trim(); const category = document.getElementById('prodCategory').value; const price = parseFloat(document.getElementById('prodPrice').value); const oldPrice = parseFloat(document.getElementById('prodOldPrice').value) || price; const stock = parseInt(document.getElementById('prodStock').value) || 0; const description = document.getElementById('prodDesc').value.trim(); const sizes = document.getElementById('prodSizes').value.split(',').map(s => s.trim()).filter(s => s); const imgPreview = document.getElementById('prodImgPreview'); const image = imgPreview ? imgPreview.src : '';
   if (!name || !price) { showToast('Name and price required!', 'error'); return; }
-  if (id) {
-    const idx = products.findIndex(p => p.id === id);
-    if (idx > -1) products[idx] = { ...products[idx], name, category, price, oldPrice, stock, description, sizes, image: image || products[idx].image };
-  } else {
-    products.push({ id: Date.now(), name, category, price, oldPrice, stock, description, sizes, image });
-  }
-  saveData(); closeAdminModal();
-  showAdminTab('products');
-  renderProducts(); renderFilterChips();
-  showToast('Product saved!', 'success');
+  if (id) { const idx = products.findIndex(p => p.id === id); if (idx > -1) products[idx] = { ...products[idx], name, category, price, oldPrice, stock, description, sizes, image: image || products[idx].image }; } else { products.push({ id: Date.now(), name, category, price, oldPrice, stock, description, sizes, image }); }
+  saveData(); closeAdminModal(); showAdminTab('products'); renderProducts(); renderFilterChips(); showToast('Product saved!', 'success');
 }
 
-function deleteProduct(id) {
-  if (!confirm('Delete this product?')) return;
-  products = products.filter(p => p.id !== id);
-  saveData(); showAdminTab('products');
-  renderProducts(); renderFilterChips();
-  showToast('Product deleted!', 'success');
-}
+function deleteProduct(id) { if (!confirm('Delete this product?')) return; products = products.filter(p => p.id !== id); saveData(); showAdminTab('products'); renderProducts(); renderFilterChips(); showToast('Product deleted!', 'success'); }
 
 function openCategoryForm(id) {
   const c = id ? categories.find(cat => cat.id === id) : { name: '', count: 0, image: '' };
-  document.getElementById('adminModalContent').innerHTML = `
-    <h2>${id ? 'Edit' : 'Add'} Category</h2>
-    <div class="image-upload" onclick="document.getElementById('catImgInput').click()">
-      ${c.image ? `<img src="${c.image}" id="catImgPreview">` : '<p>Click to select an image</p>'}
-      <p>Click to upload image</p>
-      <input type="file" id="catImgInput" accept="image/*" style="display: none;" onchange="previewImage(this, 'catImgPreview')">
-    </div>
-    <div class="form-group"><label>Category Name *</label><input type="text" id="catName" value="${c.name}"></div>
-    <div class="form-group"><label>Product Count</label><input type="number" id="catCount" value="${c.count}"></div>
-    <div style="display: flex; gap: 10px; justify-content: flex-end;">
-      <button class="btn" onclick="closeAdminModal()" style="background: var(--border);">Cancel</button>
-      <button class="btn btn-primary" onclick="saveCategory(${id || 'null'})">Save</button>
-    </div>
-  `;
+  document.getElementById('adminModalContent').innerHTML = `<h2>${id ? 'Edit' : 'Add'} Category</h2><div class="image-upload" onclick="document.getElementById('catImgInput').click()">${c.image ? `<img src="${c.image}" id="catImgPreview">` : '<p>Click to select an image</p>'}<p>Click to upload image</p><input type="file" id="catImgInput" accept="image/*" style="display: none;" onchange="previewImage(this, 'catImgPreview')"></div><div class="form-group"><label>Category Name *</label><input type="text" id="catName" value="${c.name}"></div><div class="form-group"><label>Product Count</label><input type="number" id="catCount" value="${c.count}"></div><div style="display: flex; gap: 10px; justify-content: flex-end;"><button class="btn" onclick="closeAdminModal()" style="background: var(--border);">Cancel</button><button class="btn btn-primary" onclick="saveCategory(${id || 'null'})">Save</button></div>`;
   document.getElementById('adminModal').classList.add('active');
 }
 
 function saveCategory(id) {
-  const name = document.getElementById('catName').value.trim();
-  const count = parseInt(document.getElementById('catCount').value) || 0;
-  const imgPreview = document.getElementById('catImgPreview');
-  const image = imgPreview ? imgPreview.src : '';
+  const name = document.getElementById('catName').value.trim(); const count = parseInt(document.getElementById('catCount').value) || 0; const imgPreview = document.getElementById('catImgPreview'); const image = imgPreview ? imgPreview.src : '';
   if (!name) { showToast('Name required!', 'error'); return; }
-  if (id) {
-    const idx = categories.findIndex(c => c.id === id);
-    if (idx > -1) categories[idx] = { ...categories[idx], name: name.toUpperCase(), count, image: image || categories[idx].image };
-  } else {
-    categories.push({ id: Date.now(), name: name.toUpperCase(), count, image });
-  }
-  saveData(); closeAdminModal();
-  showAdminTab('catalog');
-  renderCategories(); renderFilterChips();
-  showToast('Category saved!', 'success');
+  if (id) { const idx = categories.findIndex(c => c.id === id); if (idx > -1) categories[idx] = { ...categories[idx], name: name.toUpperCase(), count, image: image || categories[idx].image }; } else { categories.push({ id: Date.now(), name: name.toUpperCase(), count, image }); }
+  saveData(); closeAdminModal(); showAdminTab('catalog'); renderCategories(); renderFilterChips(); showToast('Category saved!', 'success');
 }
 
-function deleteCategory(id) {
-  if (!confirm('Delete this category?')) return;
-  categories = categories.filter(c => c.id !== id);
-  saveData(); showAdminTab('catalog');
-  renderCategories(); renderFilterChips();
-  showToast('Category deleted!', 'success');
-}
+function deleteCategory(id) { if (!confirm('Delete this category?')) return; categories = categories.filter(c => c.id !== id); saveData(); showAdminTab('catalog'); renderCategories(); renderFilterChips(); showToast('Category deleted!', 'success'); }
 
-function saveSettings() {
-  settings.storeName = document.getElementById('setStoreName').value.trim();
-  settings.email = document.getElementById('setEmail').value.trim();
-  settings.phone = document.getElementById('setPhone').value.trim();
-  settings.address = document.getElementById('setAddress').value.trim();
-  settings.facebook = document.getElementById('setFacebook').value.trim();
-  settings.youtube = document.getElementById('setYoutube').value.trim();
-  saveData();
-  updateSocialLinks();
-  showToast('Settings saved!', 'success');
-}
+function saveSettings() { settings.storeName = document.getElementById('setStoreName').value.trim(); settings.email = document.getElementById('setEmail').value.trim(); settings.phone = document.getElementById('setPhone').value.trim(); settings.address = document.getElementById('setAddress').value.trim(); settings.facebook = document.getElementById('setFacebook').value.trim(); settings.youtube = document.getElementById('setYoutube').value.trim(); saveData(); updateSocialLinks(); showToast('Settings saved!', 'success'); }
 
-function updateOrderStatus(id, status) {
-  const idx = orders.findIndex(o => o.id === id);
-  if (idx > -1) { orders[idx].status = status; saveData(); showToast('Order updated!', 'success'); }
-}
+function updateOrderStatus(id, status) { const idx = orders.findIndex(o => o.id === id); if (idx > -1) { orders[idx].status = status; saveData(); showToast('Order updated!', 'success'); } }
 
 function closeAdminModal() { document.getElementById('adminModal').classList.remove('active'); }
 
